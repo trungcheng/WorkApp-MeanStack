@@ -1,0 +1,35 @@
+<!-- BEGIN SIDEBAR TOGGLER BUTTON -->
+<div class="menu-toggler sidebar-toggler">
+</div>
+<!-- END SIDEBAR TOGGLER BUTTON -->
+
+<div class="logo">
+    <a href="#/access/login">
+        <h2>LOGIN | WORK<span style="color:red;">APP</span></h2>
+    </a>
+</div>
+
+<!-- BEGIN LOGIN -->
+<div class="content" ng-controller="LoginController">
+    <!-- BEGIN LOGIN FORM -->
+    <form class="login-form" ng-submit="login()" role="form">
+        <div class="form-group">
+            <input class="form-control" type="email" placeholder="Enter your email address" data-ng-model="Credential.email" />
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="password" placeholder="Enter your password" data-ng-model="Credential.password"/>
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn red btn-block uppercase">Login</button>
+        </div>
+        <div class="form-actions">
+            <div class="pull-left">
+                <a href="#/access/register">Register now !</a>
+            </div>
+            <div class="pull-right">
+                <a href="javascript:;" id="forget-password" class="forget-password">Forgot Password?</a>
+            </div>
+        </div>
+    </form>
+    <!-- END LOGIN FORM -->   
+</div>

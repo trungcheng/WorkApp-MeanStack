@@ -1,0 +1,20 @@
+var mongoose = require('mongoose');
+
+var UserSchema = new mongoose.Schema({
+	name:{
+		first: {type: String, required: true},
+		last: {type: String, required: true}
+	},
+	email: {type: String, unique: true, required: true},
+	phone: Number,
+	address: String,
+	password: {type: String, required: true},
+	teams: {type: Array},
+	active: {type: Boolean, default: false},
+	created_at: {type:Date, default: Date.now},
+	updated_at: {type:Date, default: Date.now},
+	created_by: {type: mongoose.Schema.Types.ObjectId},
+	updated_by: {type: mongoose.Schema.Types.ObjectId}
+})
+
+module.exports = mongoose.model('User', UserSchema);

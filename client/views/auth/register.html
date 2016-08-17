@@ -1,0 +1,43 @@
+<!-- BEGIN SIDEBAR TOGGLER BUTTON -->
+<div class="menu-toggler sidebar-toggler">
+</div>
+<!-- END SIDEBAR TOGGLER BUTTON -->
+
+<div class="logo1">
+    <a href="#/access/register">
+        <h2>REGISTER | WORK<span style="color:red;">APP</span></h2>
+    </a>
+</div>
+
+<!-- BEGIN LOGIN -->
+<div class="content" ng-controller="RegisterController">
+    <!-- BEGIN LOGIN FORM -->
+    <form class="login-form" ng-submit="register()" role="form">
+        <div class="form-group">
+            <input class="form-control" type="text" placeholder="Enter your first name" data-ng-model="Credential.first" />
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="text" placeholder="Enter your last name" data-ng-model="Credential.last" />
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="email" placeholder="Enter your email address" data-ng-model="Credential.email" />
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="password" placeholder="Enter your password" data-ng-model="Credential.password"/>
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="password" placeholder="Enter your confirm password" data-ng-model="Credential.confirmpassword"/>
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="text" placeholder="Enter your address" data-ng-model="Credential.address"/>
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="text" placeholder="Enter your phone number" data-ng-model="Credential.phone"/>
+        </div>
+        <div class="form-actions" style="margin-top:30px;">
+            <a href="#/access/login" class="pull-left">Login now !</a>
+            <button type="submit" id="register-submit-btn" class="btn red uppercase pull-right">Register</button>
+        </div>
+    </form>
+    <!-- END LOGIN FORM -->   
+</div>
