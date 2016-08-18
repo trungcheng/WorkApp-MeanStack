@@ -12,15 +12,23 @@
 <!-- BEGIN LOGIN -->
 <div class="content" ng-controller="LoginController">
     <!-- BEGIN LOGIN FORM -->
-    <form class="login-form" ng-submit="login()" role="form">
+    <form name="form" novalidate class="login-form" ng-submit="login()" role="form">
         <div class="form-group">
-            <input class="form-control" type="email" placeholder="Enter your email address" data-ng-model="Credential.email" />
+            <input class="form-control" name="uEmail" type="email" placeholder="Enter your email address" data-ng-model="Credential.email" required />
+            <div ng-show="form.$submitted || form.uEmail.$touched">
+                <span class="error" ng-show="form.uEmail.$error.required">Email isn't empty</span>
+                <span class="error" ng-show="form.uEmail.$error.email">This is not a valid email.</span>
+            </div>
         </div>
         <div class="form-group">
-            <input class="form-control" type="password" placeholder="Enter your password" data-ng-model="Credential.password"/>
+            <input class="form-control" ng-minlength="6" name="uPass" type="password" placeholder="Enter your password" data-ng-model="Credential.password" required />
+            <div ng-show="form.$submitted || form.uPass.$touched">
+                <span ng-show="form.uPass.$error.minlength" class="error">Password must be at least 6 characters.</span>
+                <div class="error" ng-show="form.uPass.$error.required">Password isn't empty.</div>
+            </div>
         </div>
         <div class="form-actions">
-            <button type="submit" class="btn red btn-block uppercase">Login</button>
+            <button ng-disabled="form.$invalid" type="submit" class="btn red btn-block uppercase">Login</button>
         </div>
         <div class="form-actions">
             <div class="pull-left">

@@ -1,12 +1,10 @@
 angular.module('SteedOfficeApp').controller('LoginController', function($rootScope, $scope, $state,$cookieStore,$location,LoginService,ToastFactory,socket) {
 
 	$scope.Credential = {};
-	// $scope.verifyStatus = false;
-
-	var query = $location.search().stt;
-	var msg = query.replace("-"," ");
-	if(typeof query != undefined || query != null){
-		// $scope.verifyStatus = true;
+	
+	if($location.search().stt){
+		var query = $location.search().stt;
+		var msg = query.replace(/-/g, " ");
 		ToastFactory.popSuccess(msg);
 	}
 
@@ -23,28 +21,5 @@ angular.module('SteedOfficeApp').controller('LoginController', function($rootSco
 			}
 		})
 	}
-
-	// $scope.verify = function(){
-	// 	LoginService.getVerify().success(function(response){
-	// 		if(response.status){
-	// 			ToastFactory.popSuccess(response.message);
-	// 		}else{
-	// 			ToastFactory.popErrors(response.message);
-	// 		}
-	// 	})
-	// }
-
-	// $scope.logout = function(){
-	// 	LoginService.getLogout().success(function(response){
-	// 		if(response.status){
-	// 			$cookieStore.remove('CurrentUser');
-	// 			ToastFactory.popSuccess(response.message);
-	// 			$state.go('access.login');
-	// 		}
-	// 		else{
-	// 			ToastFactory.popErrors(response.message);
-	// 		}
-	// 	})
-	// }
 
 });

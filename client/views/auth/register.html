@@ -12,31 +12,65 @@
 <!-- BEGIN LOGIN -->
 <div class="content" ng-controller="RegisterController">
     <!-- BEGIN LOGIN FORM -->
-    <form class="login-form" ng-submit="register()" role="form">
+    <form name="form" novalidate class="login-form" ng-submit="register()" role="form">
         <div class="form-group">
-            <input class="form-control" type="text" placeholder="Enter your first name" data-ng-model="Credential.first" />
+            <input class="form-control" ng-minlength="2" ng-maxlength="6" name="uFirst" type="text" placeholder="Enter your first name" data-ng-model="Credential.first" required />
+            <div ng-show="form.$submitted || form.uFirst.$touched">
+                <span ng-show="form.uFirst.$error.minlength" class="error">First name must be at least 2 characters.</span>
+                <span ng-show="form.uFirst.$error.maxlength" class="error">First name only a maximum of 6 characters</span>
+                <div class="error" ng-show="form.uFirst.$error.required">First name isn't empty.</div>
+            </div>
         </div>
         <div class="form-group">
-            <input class="form-control" type="text" placeholder="Enter your last name" data-ng-model="Credential.last" />
+            <input class="form-control" ng-minlength="2" ng-maxlength="6" name="uLast" type="text" placeholder="Enter your last name" data-ng-model="Credential.last" required />
+            <div ng-show="form.$submitted || form.uLast.$touched">
+                <span ng-show="form.uLast.$error.minlength" class="error">Last name must be at least 2 characters.</span>
+                <span ng-show="form.uLast.$error.maxlength" class="error">Last name only a maximum of 6 characters</span>
+                <div class="error" ng-show="form.uLast.$error.required">Last name isn't empty.</div>
+            </div>
         </div>
         <div class="form-group">
-            <input class="form-control" type="email" placeholder="Enter your email address" data-ng-model="Credential.email" />
+            <input class="form-control" name="uEmail" ng-blur="checkEmail()" type="email" placeholder="Enter your email address" data-ng-model="Credential.email" required />
+            <div ng-show="form.$submitted || form.uEmail.$touched">
+                <span ng-show="!emailStatus && blured" class="error">Email has already exits.</span>
+                <span class="error" ng-show="form.uEmail.$error.required">Email isn't empty</span>
+                <span class="error" ng-show="form.uEmail.$error.email">This is not a valid email.</span>
+            </div>
         </div>
         <div class="form-group">
-            <input class="form-control" type="password" placeholder="Enter your password" data-ng-model="Credential.password"/>
+            <input class="form-control" ng-minlength="6" name="uPass" type="password" placeholder="Enter your password" data-ng-model="Credential.password" required />
+            <div ng-show="form.$submitted || form.uPass.$touched">
+                <span ng-show="form.uPass.$error.minlength" class="error">Password must be at least 6 characters.</span>
+                <div class="error" ng-show="form.uPass.$error.required">Password isn't empty.</div>
+            </div>
         </div>
         <div class="form-group">
-            <input class="form-control" type="password" placeholder="Enter your confirm password" data-ng-model="Credential.confirmpassword"/>
+            <input class="form-control" ng-minlength="6" name="ucPass" type="password" placeholder="Enter your confirm password" data-ng-model="Credential.confirmpassword" required />
+            <div ng-show="form.$submitted || form.ucPass.$touched">
+                <span ng-show="form.ucPass.$error.minlength" class="error">Confirm password must be at least 6 characters.</span>
+                <div class="error" ng-show="form.ucPass.$error.required">Confirm password isn't empty.</div>
+            </div>
+            <div ng-show="(form.uPass.$dirty && form.ucPass.$dirty) && (Credential.password != Credential.confirmpassword)">
+                <span class="error">Password must be equal.</span>
+            </div>
         </div>
         <div class="form-group">
-            <input class="form-control" type="text" placeholder="Enter your address" data-ng-model="Credential.address"/>
+            <input class="form-control" name="add" type="text" placeholder="Enter your address" data-ng-model="Credential.address" required />
+            <div ng-show="form.$submitted || form.add.$touched">
+                <div class="error" ng-show="form.add.$error.required">Address isn't empty.</div>
+            </div>
         </div>
         <div class="form-group">
-            <input class="form-control" type="text" placeholder="Enter your phone number" data-ng-model="Credential.phone"/>
+            <input class="form-control" name="phone" type="text" ng-pattern="phoneNumbr" placeholder="Enter your phone number" ng-blur="checkPhone()" data-ng-model="Credential.phone" required />
+            <div ng-show="form.$submitted || form.phone.$touched">
+                <span ng-show="!phoneStatus && blured" class="error">Phone has already exits.</span>
+                <div class="error" ng-show="form.phone.$error.required">Phone number isn't empty.</div>
+            </div>
+            <span class="error" ng-show="form.phone.$error.pattern">Phone number invalid</span>
         </div>
         <div class="form-actions" style="margin-top:30px;">
             <a href="#/access/login" class="pull-left">Login now !</a>
-            <button type="submit" id="register-submit-btn" class="btn red uppercase pull-right">Register</button>
+            <button ng-disabled="(Credential.password != Credential.confirmpassword || !emailStatus || !phoneStatus || form.$invalid)" type="submit" id="register-submit-btn" class="btn red uppercase pull-right">Register</button>
         </div>
     </form>
     <!-- END LOGIN FORM -->   

@@ -2,6 +2,7 @@ var User = require('../model/users.model');
 var bcrypt = require('bcrypt-nodejs');
 var jwt = require('jsonwebtoken');
 var nodemailer = require('nodemailer');
+var rand = Math.floor((Math.random() * 100) + 54);
 
 var UserController = {
 
@@ -35,54 +36,71 @@ var UserController = {
 			var user = new User(data);
 			var old_user = User.find({email:old_email});
 			if(user.email != old_user.email){
-				user.save(function(err, result){
-					if(err){
-						res.json({status: false, data: [], message: err});
-					} else {
+				req.checkBody('phone', 'phone is required').notEmpty();
+				req.checkBody('phone','format phone number wrong').isMobilePhone('vi-VN');
+				req.checkBody('email', 'email is required').notEmpty();
+				req.checkBody('email', 'format email wrong').isEmail();
+				req.checkBody('first', 'first is required').notEmpty();
+				req.checkBody('first', 'first must be at from 2-6 characters').isLength({min:2,max:6});
+				req.checkBody('last', 'last is required').notEmpty();
+				req.checkBody('last', 'last must be at from 2-6 characters').isLength({min:2,max:6});
+				req.checkBody('password', 'password is required').notEmpty();
+				req.checkBody('password', 'password must be at least 6 characters').isLength({min:6});
+				req.checkBody('address', 'address is required').notEmpty();
+				var errors = req.validationErrors();
+  				if(!errors){
+					user.save(function(err, result){
+						if(err){
+							res.json({status: false, data: [], message: err});
+						} else {
 
-						var smtpConfig = nodemailer.createTransport("SMTP",{
-							host: "smtp.gmail.com",
-							secureConnection: true,
-							port: 465,
-							requiresAuth: true,
-							domains: ["gmail.com", "googlemail.com"],
-							auth: {
-								user: "trungs1bmt@gmail.com",
-								pass: "hajimemashite"
-							}
-						});
+							console.log(result.phone);
 
-						var mailOptions,host,link;
+							var smtpConfig = nodemailer.createTransport("SMTP",{
+								host: "smtp.gmail.com",
+								secureConnection: true,
+								port: 465,
+								requiresAuth: true,
+								domains: ["gmail.com", "googlemail.com"],
+								auth: {
+									user: "trungs1bmt@gmail.com",
+									pass: "hajimemashite"
+								}
+							});
 
-						rand = Math.floor((Math.random() * 100) + 54);
-					    host = req.get('host');
-					    link = "http://"+req.get('host')+"/user/verify/confirm_email?userId="+result._id+"&timeId="+rand;
-					    mailOptions = {
-					    	from :  'WorkApp.com <trungs1bmt@gmail.com>',
-					        to : req.body.email,
-					        subject : "Please confirm your Email account",
-					        html : "Hello <strong>"+result.name.first+" "+result.name.last+"</strong>,<br> Please Click on the link to verify your email.<br><a href="+link+">Click here to verify account</a>"
-					    }
+							var mailOptions,host,link;
 
-					    smtpConfig.sendMail(mailOptions, function(error, response){
-						    if(error){
-						        console.log(error);
-						    }else{
-						    	console.log('send mail success');
-						        console.log(response.message);
+						    host = req.get('host');
+						    link = "http://"+req.get('host')+"/api/user/verify/confirm_email/"+rand+"?userId="+result._id;
+						    mailOptions = {
+						    	from :  'WorkApp.com <trungs1bmt@gmail.com>',
+						        to : req.body.email,
+						        subject : "Please confirm your Email account",
+						        html : "Hello <strong>"+result.name.first+" "+result.name.last+"</strong>,<br> Please Click on the link to verify your email.<br><a href="+link+">Click here to verify account</a>"
 						    }
-						});
 
-						smtpConfig.close();
+						    smtpConfig.sendMail(mailOptions, function(error, response){
+							    if(error){
+							        console.log(error);
+							    }else{
+							    	console.log('send mail success');
+							        console.log(response.message);
+							    }
+							});
 
-						res.json({status: true, data:result, message: 'User register success, please confirm email now !'});
-					}
-				});
+							smtpConfig.close();
+
+							res.json({status: true, data:result, message: 'User register success, please confirm email now !'});
+						}
+					});
+				}else{
+					res.json({message:'Validate failed, please try again !'});
+				}
 			}else{
 				res.json({status: false, data: [], message: 'Email has already exits !'});
 			}
 		} else {
-			res.json({status: false, data: [], message: 'Validate failed'});
+			res.json({status: false, data: [], message: 'Validate failed, please try again !'});
 		}
 	},
 
@@ -107,23 +125,44 @@ var UserController = {
 		})
 	},
 
-	verify: function(req, res){
-		var id = req.query.userId;
-		User.findOne({_id:id}, function(err, result){
-			if(err){
-				res.json({status:false, message:err});
-			}else{
-				result.active = true;
-				result.save(function(err, result1){
-					if(err){
-						res.send('Email verify failed !');
-					}else{
-						var host = req.get('host');
-						res.redirect('http://'+host+'/#/access/login?stt=Confirm-email-success');
-					}
-				})
+	checkPhone: function(req, res){
+		User.find({phone: req.params.phone}).count(function(err, count){
+			if(count == 0){
+				res.json({status: true, data: {}, message: 'Phone number invalid'});
+			} else {
+				res.json({status: false, data: [], message: 'Phone number already exists'});
 			}
-		});
+		})
+	},
+
+	verify: function(req, res){
+		var timeId = req.params.timeId;
+		var userId = req.query.userId;
+		req.checkQuery('userId','UserId must be MongoId').isMongoId();
+		var errors = req.validationErrors();
+		if(!errors){
+			if(timeId == rand){
+				User.findOne({_id:userId}, function(err, result){
+					if(err){
+						res.json({status:false, message:err});
+					}else{
+						result.active = true;
+						result.save(function(err, result1){
+							if(err){
+								res.send('Email verify failed !');
+							}else{
+								var host = req.get('host');
+								res.redirect('http://'+host+'/#/access/login?stt=Confirm-email-success');
+							}
+						})
+					}
+				});
+			}else{
+				res.json({message:'Confirm failed !'});
+			}
+		}else{
+			res.json({message:'Confirm failed !'});
+		}
 	},
 
 	authenticate: function(req, res){

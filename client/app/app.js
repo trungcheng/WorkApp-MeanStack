@@ -9,6 +9,8 @@ var SteedOfficeApp = angular.module('SteedOfficeApp', [
     "LocalStorageModule",
     "toaster",
     "ngCookies",
+    'validation',
+    'validation.rule',
 ]);
 
 // //AngularJS v1.3.x workaround for old style controller declarition in HTML
