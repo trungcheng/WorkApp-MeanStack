@@ -1,6 +1,15 @@
 angular.module('SteedOfficeApp').controller('RegisterController', function($http, $rootScope, $scope, $state,$cookieStore,$location,RegisterService,ToastFactory,socket) {
 
 	$scope.Credential = {};
+
+	$scope.Credential = {
+		first:null,
+		last:null,
+		email: null,
+		password:null,
+		address:null,
+		phone:null
+	}
     // $scope.isLoading = false;
     $scope.userData = {token:''};
 
@@ -22,7 +31,14 @@ angular.module('SteedOfficeApp').controller('RegisterController', function($http
 				$state.go('access.login');
 			}
 			else{
-				console.log(response);
+				$scope.Credential = {
+					first:null,
+					last:null,
+					email: null,
+					password:null,
+					address:null,
+					phone:null
+				}
 				ToastFactory.popErrors(response.message);
 			}
 		});

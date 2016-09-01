@@ -13,18 +13,20 @@
 <div class="content" ng-controller="LoginController">
     <!-- BEGIN LOGIN FORM -->
     <form name="form" novalidate class="login-form" ng-submit="login()" role="form">
-        <div class="form-group">
+        <div class="form-group inner-addon left-addon">
+            <i class="glyphicon glyphicon-envelope"></i>
             <input class="form-control" name="uEmail" type="email" placeholder="Enter your email address" data-ng-model="Credential.email" required />
             <div ng-show="form.$submitted || form.uEmail.$touched">
-                <span class="error" ng-show="form.uEmail.$error.required">Email isn't empty</span>
-                <span class="error" ng-show="form.uEmail.$error.email">This is not a valid email.</span>
+                <div class="error" ng-show="form.uEmail.$error.required">Email can not be blank</div>
+                <div class="error" ng-show="form.uEmail.$error.email">This is not a valid email.</div>
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group inner-addon left-addon">
+            <i class="glyphicon glyphicon-lock"></i>
             <input class="form-control" ng-minlength="6" name="uPass" type="password" placeholder="Enter your password" data-ng-model="Credential.password" required />
             <div ng-show="form.$submitted || form.uPass.$touched">
-                <span ng-show="form.uPass.$error.minlength" class="error">Password must be at least 6 characters.</span>
-                <div class="error" ng-show="form.uPass.$error.required">Password isn't empty.</div>
+                <div ng-show="form.uPass.$error.minlength" class="error">Password must be at least 6 characters.</div>
+                <div class="error" ng-show="form.uPass.$error.required">Password can not be blank.</div>
             </div>
         </div>
         <div class="form-actions">
@@ -32,10 +34,10 @@
         </div>
         <div class="form-actions">
             <div class="pull-left">
-                <a href="#/access/register">Register now !</a>
+                <a href="#/access/register">Create account</a>
             </div>
             <div class="pull-right">
-                <a href="javascript:;" id="forget-password" class="forget-password">Forgot Password?</a>
+                <a href="#/access/password_reset">Forgot Password?</a>
             </div>
         </div>
     </form>

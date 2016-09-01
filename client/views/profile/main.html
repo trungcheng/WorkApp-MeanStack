@@ -1,4 +1,3 @@
-<!-- BEGIN PAGE HEADER-->
 <div class="page-bar">
     <ul class="page-breadcrumb">
         <li>
@@ -49,20 +48,27 @@
 <h3 class="page-title"> Profile </h3>
 <!-- END PAGE HEADER-->
 <!-- BEGIN PAGE CONTENT-->
-<div class="row" ng-controller="UserProfileController">
+<div class="row" ng-controller="UserProfileController" ng-init="index()">
     <div class="col-md-12">
         <!-- BEGIN PROFILE SIDEBAR -->
         <div class="profile-sidebar">
             <!-- PORTLET MAIN -->
             <div class="portlet light profile-sidebar-portlet">
                 <!-- SIDEBAR USERPIC -->
-                <div class="profile-userpic">
-                    <img src="{{settings.assetsPath}}/pages/media/profile/profile_user.jpg" class="img-responsive" alt=""> </div>
+                <div class="profile-userpic" ng-if="uploaded">
+                    <img ng-src="/server/{{Profile.avatar}}" class="img-responsive" alt="">
+                </div>
+                <div class="profile-userpic" ng-if="!uploaded">
+                    <img ng-src="{{$settings.layoutPath}}/img/index.png" class="img-responsive" alt="">
+                </div>
                 <!-- END SIDEBAR USERPIC -->
                 <!-- SIDEBAR USER TITLE -->
                 <div class="profile-usertitle">
-                    <div class="profile-usertitle-name"> Marcus Doe </div>
-                    <div class="profile-usertitle-job"> Developer </div>
+                    <div class="profile-usertitle-name">
+                        <span>{{Profile.name.first}}</span>
+                        <span>{{Profile.name.last}}</span>
+                    </div>
+                    <div><span>{{Profile.email}}</span></div>
                 </div>
                 <!-- END SIDEBAR USER TITLE -->
                 <!-- SIDEBAR BUTTONS -->
@@ -74,30 +80,29 @@
                 <!-- SIDEBAR MENU -->
                 <div class="profile-usermenu">
                     <ul class="nav">
-                        <li ng-class="{active: $state.includes('profile.dashboard')}">
+                        <!-- <li ng-class="{active: $state.includes('profile.dashboard')}">
                             <a ui-sref="profile.dashboard">
                                 <i class="icon-home"></i> Overview </a>
-                        </li>
-                        <li ng-class="{active: $state.includes('profile.account')}">
-                            <a ui-sref="profile.account">
+                        </li> -->
+                        <li ng-class="{active: $state.includes('app.profile.account')}">
+                            <a ui-sref="app.profile.account">
                                 <i class="icon-settings"></i> Account Settings </a>
                         </li>
-                        <li>
+                        <!-- <li>
                             <a href="#/todo">
                                 <i class="icon-check"></i> Tasks </a>
                         </li>
                         <li ng-class="{active: $state.includes('profile.help')}">
                             <a ui-sref="profile.help">
                                 <i class="icon-info"></i> Help </a>
-                        </li>
+                        </li> -->
                     </ul>
                 </div>
                 <!-- END MENU -->
             </div>
             <!-- END PORTLET MAIN -->
             <!-- PORTLET MAIN -->
-            <div class="portlet light">
-                <!-- STAT -->
+            <!-- <div class="portlet light">
                 <div class="row list-separated profile-stat">
                     <div class="col-md-4 col-sm-4 col-xs-6">
                         <div class="uppercase profile-stat-title"> 37 </div>
@@ -112,7 +117,6 @@
                         <div class="uppercase profile-stat-text"> Uploads </div>
                     </div>
                 </div>
-                <!-- END STAT -->
                 <div>
                     <h4 class="profile-desc-title">About Marcus Doe</h4>
                     <span class="profile-desc-text"> Lorem ipsum dolor sit amet diam nonummy nibh dolore. </span>
@@ -129,7 +133,7 @@
                         <a href="http://www.facebook.com/keenthemes/">keenthemes</a>
                     </div>
                 </div>
-            </div>
+            </div> -->
             <!-- END PORTLET MAIN -->
         </div>
         <!-- END BEGIN PROFILE SIDEBAR -->
@@ -138,4 +142,4 @@
         <!-- END PROFILE CONTENT -->
     </div>
 </div>
-<!-- END PAGE CONTENT-->
+<!-- END PAGE CONTENT

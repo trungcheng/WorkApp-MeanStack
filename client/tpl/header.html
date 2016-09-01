@@ -3,7 +3,8 @@
     <!-- BEGIN LOGO -->
     <div class="page-logo">
         <a href="#/app/dashboard">
-            <img src="{{settings.layoutPath}}/img/logo.png" alt="logo" class="logo-default" /> </a>
+            <img src="{{$settings.layoutPath}}/img/logo.png" alt="logo" class="logo-default" />
+        </a>
         <div class="menu-toggler sidebar-toggler">
             <!-- DOC: Remove the above "hide" to enable the sidebar toggler button on header -->
         </div>
@@ -147,7 +148,7 @@
                             <li>
                                 <a href="#/profile/dashboard">
                                     <span class="photo">
-                                        <img src="{{settings.layoutPath}}/img/avatar2.jpg" class="img-circle" alt=""> </span>
+                                        <img ng-src="{{$settings.layoutPath}}/img/avatar2.jpg" class="img-circle" alt=""> </span>
                                     <span class="subject">
                                         <span class="from"> Lisa Wong </span>
                                         <span class="time">Just Now </span>
@@ -158,7 +159,7 @@
                             <li>
                                 <a href="#/profile/dashboard">
                                     <span class="photo">
-                                        <img src="{{settings.layoutPath}}/img/avatar3.jpg" class="img-circle" alt=""> </span>
+                                        <img ng-src="{{$settings.layoutPath}}/img/avatar3.jpg" class="img-circle" alt=""> </span>
                                     <span class="subject">
                                         <span class="from"> Richard Doe </span>
                                         <span class="time">16 mins </span>
@@ -169,7 +170,7 @@
                             <li>
                                 <a href="#/profile/dashboard">
                                     <span class="photo">
-                                        <img src="{{settings.layoutPath}}/img/avatar1.jpg" class="img-circle" alt=""> </span>
+                                        <img ng-src="{{$settings.layoutPath}}/img/avatar1.jpg" class="img-circle" alt=""> </span>
                                     <span class="subject">
                                         <span class="from"> Bob Nilson </span>
                                         <span class="time">2 hrs </span>
@@ -319,41 +320,46 @@
             <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
             <li class="dropdown dropdown-language hide">
                 <a href="#" class="dropdown-toggle" dropdown-menu-hover data-toggle="dropdown" data-close-others="true">
-                    <img alt="" src="/client/assets/global/img/flags/us.png">
+                    <img alt="" ng-src="/client/assets/global/img/flags/us.png">
                     <span class="langname"> EN </span>
                     <i class="fa fa-angle-down"></i>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-default">
                     <li class="active">
                         <a href="#">
-                            <img alt="" src="{{settings.globalPath}}/img/flags/us.png"> English </a>
+                            <img alt="" ng-src="{{$settings.globalPath}}/img/flags/us.png"> English </a>
                     </li>
                     <li>
                         <a href="#">
-                            <img alt="" src="{{settings.globalPath}}/img/flags/de.png"> German </a>
+                            <img alt="" ng-src="{{$settings.globalPath}}/img/flags/de.png"> German </a>
                     </li>
                     <li>
                         <a href="#">
-                            <img alt="" src="{{settings.globalPath}}/img/flags/ru.png"> Russian </a>
+                            <img alt="" ng-src="{{$settings.globalPath}}/img/flags/ru.png"> Russian </a>
                     </li>
                     <li>
                         <a href="#">
-                            <img alt="" src="{{settings.globalPath}}/img/flags/fr.png"> French </a>
+                            <img alt="" ng-src="{{$settings.globalPath}}/img/flags/fr.png"> French </a>
                     </li>
                 </ul>
             </li>
             <!-- END LANGUAGE BAR -->
             <!-- BEGIN USER LOGIN DROPDOWN -->
             <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
-            <li class="dropdown dropdown-user" ng-controller="LoginController">
-                <a href="#" class="dropdown-toggle" dropdown-menu-hover data-toggle="dropdown" data-close-others="true">
-                    <!-- <img alt="" class="img-circle" src="{{settings.layoutPath}}/img/avatar3_small.jpg" /> -->
-                    <span class="username username-hide-on-mobile pull-right" ng-if="rootAuth">{{rootAuth.name.last}}</span>
+            <li class="dropdown dropdown-user" ng-controller="UserProfileController" ng-init="index()">
+                <a href="#" class="dropdown-toggle" dropdown-menu-hover data-toggle="dropdown" ng-if="!uploaded" data-close-others="true" style="padding-left:20px;">
+                    <img alt="" class="img-circle" ng-src="{{$settings.layoutPath}}/img/index.png" />
+                    <span class="username username-hide-on-mobile">{{Profile.name.last}}</span>
+                    <i class="fa fa-angle-down"></i>
+                </a>
+                <a href="#" class="dropdown-toggle" dropdown-menu-hover data-toggle="dropdown" ng-if="uploaded" data-close-others="true" style="padding-left:20px;">
+                    <img alt="" class="img-circle" ng-src="/server/{{Profile.avatar}}" />
+                    <span class="username username-hide-on-mobile">{{Profile.name.last}}</span>
                     <i class="fa fa-angle-down"></i>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-default">
                     <li>
-                        <a href="#/profile/dashboard">
+                        <a href="#/app/profile/account">
                             <i class="icon-user"></i> My Profile </a>
                     </li>
                     <li>

@@ -2,7 +2,10 @@ var User = require('../model/users.model');
 var bcrypt = require('bcrypt-nodejs');
 var jwt = require('jsonwebtoken');
 var nodemailer = require('nodemailer');
+var fs = require('fs');
 var rand = Math.floor((Math.random() * 100) + 54);
+
+var uploadPath = './public/uploads/';
 
 var UserController = {
 
@@ -12,6 +15,17 @@ var UserController = {
 				res.json({status: false, data:{}, message:err});
 			}else{
 				res.json({status: true, data:user, message:'Get all user success'});
+			}
+		})
+	},
+
+	show: function(req, res){
+		var id = req.user._id
+		User.findOne({_id:id}, function(err, result){
+			if(err){
+				res.json({status: false, message:err});
+			}else{
+				res.json({status: true, data:result, message:'Show user success'});
 			}
 		})
 	},
@@ -37,7 +51,6 @@ var UserController = {
 			var old_user = User.find({email:old_email});
 			if(user.email != old_user.email){
 				req.checkBody('phone', 'phone is required').notEmpty();
-				req.checkBody('phone','format phone number wrong').isMobilePhone('vi-VN');
 				req.checkBody('email', 'email is required').notEmpty();
 				req.checkBody('email', 'format email wrong').isEmail();
 				req.checkBody('first', 'first is required').notEmpty();
@@ -53,8 +66,6 @@ var UserController = {
 						if(err){
 							res.json({status: false, data: [], message: err});
 						} else {
-
-							console.log(result.phone);
 
 							var smtpConfig = nodemailer.createTransport("SMTP",{
 								host: "smtp.gmail.com",
@@ -75,8 +86,8 @@ var UserController = {
 						    mailOptions = {
 						    	from :  'WorkApp.com <trungs1bmt@gmail.com>',
 						        to : req.body.email,
-						        subject : "Please confirm your Email account",
-						        html : "Hello <strong>"+result.name.first+" "+result.name.last+"</strong>,<br> Please Click on the link to verify your email.<br><a href="+link+">Click here to verify account</a>"
+						        subject : "[WorkApp] Please confirm your Email account",
+						        html : "Welcome <strong>"+result.name.first+" "+result.name.last+"</strong> to WorkApp !<br><br>Please Click on the link to verify your email.<br><a href="+link+">Click here to verify account</a><br><br>Thanks,<br>Your friends at WorkApp"
 						    }
 
 						    smtpConfig.sendMail(mailOptions, function(error, response){
@@ -151,6 +162,15 @@ var UserController = {
 							if(err){
 								res.send('Email verify failed !');
 							}else{
+								
+								if(!fs.existsSync(uploadPath + result._id)) {
+								    fs.mkdirSync(uploadPath + result._id, 0777, function(err){
+								    	if(err) throw err;
+								    	console.log('create dir success');
+								    });
+								}else{
+									console.log('Dir already exists');
+								}
 								var host = req.get('host');
 								res.redirect('http://'+host+'/#/access/login?stt=Confirm-email-success');
 							}
@@ -171,7 +191,7 @@ var UserController = {
 				res.json({status: false, message: err});
 			}
 			if(!authen){
-				res.json({status: false, message: 'Authen failed, user not found'});
+				res.json({status: false, message: 'Your email wrong !'});
 			}else{
 				var oldpass = authen.password;
 				if(bcrypt.compareSync(req.body.password, oldpass)){
@@ -185,7 +205,167 @@ var UserController = {
 						res.json({status: false, data:{}, message: 'Not active email, please confirm email now !'})
 					}
 				}else{
-					res.json({status: false, data:{}, message: 'Email or password wrong.'})
+					res.json({status: false, data:{}, message: 'Your password wrong.'})
+				}
+			}
+		})
+	},
+
+	resetpass: function(req, res){
+		User.findOne({email:req.body.email}, function(err, result){
+			if(err){
+				res.json({status: false, message: err});
+			}else{
+				var token_reset = jwt.sign({_id:result._id}, 'trungdn', {
+					expiresIn: '15m'
+				});
+				var smtpConfig = nodemailer.createTransport("SMTP",{
+					host: "smtp.gmail.com",
+					secureConnection: true,
+					port: 465,
+					requiresAuth: true,
+					domains: ["gmail.com", "googlemail.com"],
+					auth: {
+						user: "trungs1bmt@gmail.com",
+						pass: "hajimemashite"
+					}
+				});
+				var mailOptions,host,link;
+			    host = req.get('host');
+			    link = "http://"+req.get('host')+"/api/user/password_reset/"+token_reset;
+			    mailOptions = {
+			    	from :  'WorkApp.com <trungs1bmt@gmail.com>',
+			        to : req.body.email,
+			        subject : "[WorkApp] Please reset your password",
+			        html : "We heard that you lost your WorkApp password. Sorry about that !<br><br>But don’t worry! You can use the following link within the next day to reset your password:<br><br> Please Click on the link to reset your password.<br><a href="+link+">Click here to reset your password</a><br><br>Thanks,<br>Your friends at WorkApp"
+			    }
+
+			    smtpConfig.sendMail(mailOptions, function(err){
+				    if (err) throw err;
+				});
+
+				smtpConfig.close();
+
+				res.json({status:true, message:'Please check email to reset password now !'});
+			}
+		})
+	},
+
+	verify_resetpass: function(req, res){
+		var id = req.params.id;
+		var host = req.get('host');
+		res.redirect('http://'+host+'/#/access/password_reset?reset_code='+id);
+	},
+
+	changepass: function(req, res){
+		var token_rpw = req.query.token;
+		if(token_rpw){
+			jwt.verify(token_rpw, 'trungdn', function(err, decoded){
+				if(err){
+					res.status(401).json({status:false, data:{}, message:err });
+				}else{
+					req.user = decoded;
+					User.findOne({_id:req.user._id}, function(err, result){
+						if(err){
+							res.json({status: false, message:err});
+						}else{
+							result.password = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(5));
+							result.save(function(err, result1){
+								if(err){
+									res.json({status: false, message:'Your password reset failed'});
+								}else{
+									res.json({status: true, message:'Your password reset success'});
+								}
+							})
+						}
+					})
+				}
+			})
+		}else{
+			res.status(404).json({status:false, data:{}, message:'Token not found'});
+		}
+	},
+
+	update: function(req, res){
+
+		var id = req.params.id;
+		User.findOne({_id:id}, function(err, result){
+			if(err){
+				res.json({status: false, data: [], message: err});
+			} else {
+				if(result.email == req.body.email && result.phone == req.body.phone){
+					result.email = req.body.email;
+					result.phone = req.body.phone;
+					result.name.first = req.body.first;
+					result.name.last = req.body.last;
+					result.address = req.body.address;
+					result.save(function(err){
+						if(err){
+							res.json({status: false, message: err});
+						}else{
+							res.json({status: true, message: 'Update profile infomation success'});
+						}
+					})
+				}else{
+					User.find({$or:[{email:req.body.email},{phone:req.body.phone}]}).exec(function(err,result1){
+						if(err){
+							res.json({status: false, message: err});
+						}
+						if(!result1){
+							result.email = req.body.email;
+							result.phone = req.body.phone;
+							result.name.first = req.body.first;
+							result.name.last = req.body.last;
+							result.address = req.body.address;
+							result.save(function(err, result2){
+								if(err){
+									res.json({status: false, message: err});
+								}else{
+									res.json({status: true, message: 'Update profile infomation success'});
+								}
+							})
+						}else{
+							res.json({status: false, message: 'Email or phone number have already exists !'});
+						}
+					})
+				}
+			}
+		})
+	},
+
+	upload: function(req, res){
+		var id = req.user._id;
+		User.findOne({_id:id}, function(err, result){
+			if(err) throw err;
+			result.avatar = req.files[0].path;
+			result.save(function(err, result1){
+				if(err){
+					res.json({status: false,data:[], message:err});
+				}else{
+					res.json({status: true,data: result1, message:'Upload avatar success'})
+				}
+			})
+		})
+	},
+
+	updatepass: function(req, res){
+		var id = req.params.id;
+		User.findOne({_id:id}, function(err, result){
+			if(err){
+				res.json({status: false,data:[], message:err});
+			}else{
+				var oldpass = result.password;
+				if(bcrypt.compareSync(req.body.current, oldpass)){
+					result.password = bcrypt.hashSync(req.body.new, bcrypt.genSaltSync(5));
+					result.save(function(err, result1){
+						if(err){
+							res.json({status: false,data:[], message:err});
+						}else{
+							res.json({status: true,data: result1, message:'Your password have been changed success'})
+						}
+					})
+				}else{
+					res.json({status: false,data: [], message:'Your current password wrong'});
 				}
 			}
 		})

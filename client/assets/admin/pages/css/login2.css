@@ -6,6 +6,23 @@
 Login page
 ***/
 /* bg color */
+.inner-addon { 
+    position: relative; 
+}
+/* style icon */
+.inner-addon .glyphicon {
+  position: absolute;
+  padding: 13px;
+  pointer-events: none;
+  opacity:0.7;
+  color:#fff;
+}
+/* align icon */
+.left-addon .glyphicon  { left:  0px;}
+.right-addon .glyphicon { right: 0px;}
+/* add padding  */
+.left-addon input  { padding-left:  37px; }
+.right-addon input { padding-right: 30px; }
 .login-form input.ng-invalid.ng-touched{
   border-color: #990000;
 }
@@ -21,7 +38,7 @@ Login page
   background-color: #5c97bd;
 }
 .login a {
-  color: #1f1f1f !important;
+  color: #fff !important;
 }
 
 .login .logo {

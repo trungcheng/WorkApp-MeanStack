@@ -22,6 +22,13 @@ SteedOfficeApp.config(function($stateProvider, $urlRouterProvider) {
                 pageTitle: 'Register account'
             }
         })
+        .state('access.password_reset', {
+            url: "/password_reset",
+            templateUrl: "/client/views/auth/password_reset.html",
+            data: {
+                pageTitle: 'Reset password'
+            }
+        })
         .state('app', {
             url: "/app",
             templateUrl: "/client/views/app.html",

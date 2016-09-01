@@ -42,7 +42,7 @@ New Profile Page
 
 .profile-userbuttons {
   text-align: center;
-  margin-top: 10px; }
+  margin-top: 32px; }
 
 .profile-userbuttons .btn {
   margin-right: 5px; }
@@ -56,8 +56,8 @@ New Profile Page
   padding: 6px 15px; }
 
 .profile-usermenu {
-  margin-top: 30px;
-  padding-bottom: 20px; }
+  margin-top: 34px;
+  padding-bottom: 1px; }
 
 .profile-usermenu ul li {
   border-bottom: 1px solid #f0f4f7; }

@@ -2,7 +2,7 @@
 
 var SteedOfficeApp = angular.module('SteedOfficeApp', [
     "ui.router", 
-    "ui.bootstrap", 
+    "ui.bootstrap",
     "oc.lazyLoad",
     "ngSanitize",
     "pascalprecht.translate",
@@ -113,10 +113,14 @@ SteedOfficeApp.run(function($rootScope, $state,$interval, $location, $http, $coo
         $state.current = toState;
         $rootScope.rootAuth = $cookieStore.get('member');
         if ($rootScope.rootAuth == null || $rootScope.rootAuth == undefined) {
-            if($state.current.name != 'access.register'){
+            if($state.current.name != 'access.register' && $state.current.name != 'access.password_reset'){
                 $location.path('access/login');
             }else{
-                $location.path('access/register');
+                if($state.current.name == 'access.register'){
+                    $location.path('access/register');
+                }else{
+                    $location.path('access/password_reset');
+                }
             }
         }
         else{
