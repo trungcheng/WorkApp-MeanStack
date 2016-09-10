@@ -42,6 +42,13 @@ SteedOfficeApp.config(function($stateProvider, $urlRouterProvider) {
             },
             controller: "DashboardController",
         })
+        .state('app.team', {
+            url: "/team",
+            templateUrl: "/client/views/teams/dashboard.html",
+            data: {
+                pageTitle: 'Team'
+            }
+        })
         .state('app.user', {
             url: "/user",
             template: "<div ui-view class='fade-in-up'></div>",

@@ -63,7 +63,7 @@ Page Header
       display: inline-block;
       float: left; }
     .page-header.navbar .page-logo .logo-default {
-      margin: 16px 0 0 0; }
+      margin: 16px 0 0 0; font-size: 24px}
     .page-header.navbar .page-logo .logo-mini {
       display: none;
       margin-left: 5px; }

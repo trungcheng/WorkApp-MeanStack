@@ -1,0 +1,47 @@
+<div ng-init="alluser()">
+	<div class="modal-header">
+        <h3 class="modal-title" id="modal-title">{{team.name}} Team - <span style="font-size:16px;opacity:0.7">{{team.description}}</span></h3>
+    </div>
+    <div class="modal-body" id="modal-body">
+    	<div class="todo-tasklist-item-title" style="font-size:17px;">
+    	<img ng-src="/server/{{team.owner.avatar}}" style="margin-right:5px;" width="32px" height="32px"> Administrator: {{team.owner.name.first}} {{team.owner.name.last}}</div>
+		<form role="form">
+			<div class="todo-tasklist-item-title" style="font-size:17px;margin-bottom:-10px;">List members:</div>
+			<table class="table table-hover table-stripped">
+				<tr>
+					<th>Avatar</th>
+					<th>Name</th>
+					<th>Email</th>
+					<th>Address</th>
+					<th>Phone</th>
+					<th ng-if="display">Actions</th>
+				</tr>
+				<tr ng-repeat="member in team.members">
+					<td>
+						<img ng-src="/server/{{member.avatar}}" width="32px" height="32px">
+					</td>
+					<td>{{member.name.first}} {{member.name.last}}</td>
+					<td>{{member.email}}</td>
+					<td>{{member.address}}</td>
+					<td>{{member.phone}}</td>
+					<td>
+						<button ng-if="display" class="btn btn-primary"><i class="fa fa-edit"></i></button>
+						<button ng-if="display" class="btn btn-danger"><i class="fa fa-trash"></i></button>
+					</td>
+				</tr>
+			</table>
+			<div class="form-group" ng-if="display">
+                <label for="">Invite members:</label>
+                <ui-select multiple ng-model="team.selectedMember" theme="bootstrap">
+                    <ui-select-match placeholder=" Select members..."> {{$item.name.first}} {{$item.name.last}}</ui-select-match>
+                    <ui-select-choices repeat="member in members | propsFilter: {name: $select.search}"> {{member.name.first}} {{member.name.last}}</ui-select-choices>
+                </ui-select>
+                <button style="margin-top:10px;" ng-click="add()" class="btn btn-success"><i class="fa fa-plus"></i> Add now</button>
+            </div>
+		</form>
+    </div>
+    <div class="modal-footer">
+        <button ng-disabled="!display" class="btn btn-success" type="button" ng-click="ok()"><i class="fa fa-check"></i> Save</button>
+        <button class="btn btn-outline dark" type="button" ng-click="cancel()">Close</button>
+    </div>
+</div>

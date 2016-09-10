@@ -4,6 +4,7 @@ var SteedOfficeApp = angular.module('SteedOfficeApp', [
     "ui.router", 
     "ui.bootstrap",
     "oc.lazyLoad",
+    "ui.select",
     "ngSanitize",
     "pascalprecht.translate",
     "LocalStorageModule",

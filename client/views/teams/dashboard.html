@@ -1,0 +1,59 @@
+<div class="portlet light" ng-controller="TeamController" ng-init="showteam()">
+    <div class="portlet-title">
+        <div class="caption caption-md">
+            <i class="icon-globe theme-font hide"></i>
+            <span class="caption-subject font-blue-madison bold uppercase">TEAMS GROUP</span>
+        </div>
+        <div class="actions">
+            <button ng-click="display.addTeam =! display.addTeam" class="btn green"><i class="fa fa-plus"></i> Add new team</button>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div class="row" ng-if="display.addTeam">
+            <div class="col-md-12">
+                <form role="form" novalidate ng-submit="add()">
+                    <div class="form-group">
+                        <label for="">Team name: <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" ng-model="team.name" name="teamname" />
+                    </div>
+                    <div class="form-group">
+                        <label for="">Description: <span class="text-danger">*</span></label>
+                        <textarea class="form-control" ng-model="team.description" rows="10"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Invite member: <span class="text-danger">*</span></label>
+                        <ui-select multiple ng-model="team.selectedMember" theme="bootstrap">
+                            <ui-select-match placeholder="Select person...">{{$item.name.first}} {{$item.name.last}}</ui-select-match>
+                            <ui-select-choices repeat="member in members | propsFilter: {name: $select.search}"> {{member.name.first}} {{member.name.last}}</ui-select-choices>
+                        </ui-select>
+                        <!-- <p>Selected: {{team.selectedmember}}</p> -->
+                    </div>
+                    <div class="form-group text-right">
+                        <button type="reset" class="btn btn-outline dark"> Cancle</button>
+                        <button type="submit" class="btn green"><i class="fa fa-check"></i> Add team</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4" ng-repeat="team in teams" ng-click="open(team)">
+                <div class="todo-tasklist">
+                    <div class="todo-tasklist-item todo-tasklist-item-border-green">
+                        <div class="todo-tasklist-item-title" style="font-size:20px;">{{team.name}} <span class="pull-right" style="font-size:13px;opacity:0.8;padding-top:5px;">by {{team.owner.name.first}} {{team.owner.name.last}}</span></div>
+                        <div class="todo-tasklist-item-title">
+                            <img class="todo-userpic pull-left" ng-repeat="avatarMem in team.members | limitTo:avatarNum" ng-src="/server/{{avatarMem.avatar}}" width="32px" height="32px">
+                            <span class="pull-right" style="font-size:13px;opacity:0.8;padding-top:5px;">{{team.members.length}} mem</span>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="todo-tasklist-item-text"> <span style="font-size:16px;">{{team.description}}</span> </div>
+                        <div class="todo-tasklist-controls">
+                            <span class="todo-tasklist-date pull-left" style="margin-top:10px;">
+                                <i class="fa fa-calendar"></i> {{team.created_at | date:'dd-MM-yyyy HH:mm:ss'}} </span>
+                            <span class="btn green pull-right"><i class="fa fa-check"></i> Active</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -162,7 +162,6 @@ var UserController = {
 							if(err){
 								res.send('Email verify failed !');
 							}else{
-								
 								if(!fs.existsSync(uploadPath + result._id)) {
 								    fs.mkdirSync(uploadPath + result._id, 0777, function(err){
 								    	if(err) throw err;
