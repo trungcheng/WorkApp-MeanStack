@@ -7,32 +7,40 @@ angular.module('SteedOfficeApp').controller('TeamModalController', function($htt
 	$scope.display = false;
 
 	$scope.alluser = function(){
-		var memberArr = [];
 		$http.get('/api/user').success(function(response){
 			if(response.status){
-				for (var i=0; i<response.data.length;i++){
-					for (var j=0; j<team.members.length;j++){
-						if(response.data[i]._id == team.members[j]._id){
-							memberArr.push(response.data[i]);
-							for (var k=0;k<memberArr.length;k++){
-								response.data.splice(response.data.indexOf(memberArr[k]),1);
-								for (var m=0; m< response.data.length;m++){
-									if(response.data[m].id = team.owner._id){
-										response.data.splice(response.data[m],1);
-										$scope.members = response.data;
-									}
-								}
-								if(team.owner._id == $rootScope.rootAuth._id){
-									$scope.display = true;
-								}else{
-									$scope.display = false;
-								}
-							}
-						}else{
-							$scope.members = [];
-							$scope.display = false;
-						}
-					}
+				var memArr = [];
+				memArr.push(team.owner);
+				for(var i=0;i<team.members.length;i++){
+					memArr.push(team.members[i]);
+				}
+
+				$scope.members = (function () {
+			        var memArrId = {};
+			        var allUserId = {};
+			        var result = [];
+
+			        memArr.forEach(function (el, i) {
+			          memArrId[el._id] = memArr[i];
+			        });
+
+			        response.data.forEach(function (el, i) {
+			          allUserId[el._id] = response.data[i];
+			        });
+
+			        for (var i in allUserId) {
+			            if (!memArrId.hasOwnProperty(i)) {
+			                result.push(allUserId[i]);
+			            }
+			        }
+			        return result;
+			    }());
+
+				if(team.owner._id == $rootScope.rootAuth._id){
+					$scope.display = true;
+				}else{
+					$scope.members = [];
+					$scope.display = false;
 				}
 			}
 		})
