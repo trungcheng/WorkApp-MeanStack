@@ -1,0 +1,95 @@
+<div class="portlet light" ng-controller="ProjectController" ng-init="showproject()">
+    <div class="portlet-title">
+        <div class="caption caption-md">
+            <i class="icon-globe theme-font hide"></i>
+            <span class="caption-subject font-blue-madison bold uppercase">PROJECTS GROUP</span>
+        </div>
+        <div class="actions">
+            <button ng-click="display.addProject =! display.addProject" class="btn green"><i class="fa fa-plus"></i> Add project</button>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div class="row" ng-if="display.addProject">
+            <div class="col-md-12">
+                <form role="form" novalidate ng-submit="add()" name="form1">
+                    <div class="form-group">
+                        <label for="">Project name: <span class="text-danger">*</span></label>
+                        <input type="text" placeholder="Project name..." class="form-control" ng-model="project.name" name="projectname" required />
+                        <div ng-show="form1.$submitted || form1.projectname.$touched">
+                            <div class="error" ng-show="form1.projectname.$error.required">Project name can not be blank.</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Description: <span class="text-danger">*</span></label>
+                        <textarea placeholder="Project description..." name="projectdesc" required class="form-control" ng-model="project.description" rows="5"></textarea>
+                        <div ng-show="form1.$submitted || form1.projectdesc.$touched">
+                            <div class="error" ng-show="form1.projectdesc.$error.required">Project description can not be blank.</div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="">Start date:</label>
+                            <p class="input-group">
+                                <input placeholder="Project start date... ->" type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="project.start" is-open="start.opened" min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" name="startdate" />
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default" ng-click="openstart()"><i class="glyphicon glyphicon-calendar"></i></button>
+                                </span>
+                            </p>
+                            <div ng-show="form1.$submitted || form1.startdate.$touched">
+                                <div class="error" ng-show="form1.startdate.$error.required">Start date can not be blank.</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="">Due date:</label>
+                            <p class="input-group">
+                                <input placeholder="Project due date... ->" type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="project.due" is-open="due.opened" min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" name="duedate" />
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default" ng-click="opendue()"><i class="glyphicon glyphicon-calendar"></i></button>
+                                </span>
+                            </p>
+                            <div ng-show="form1.$submitted || form1.duedate.$touched">
+                                <div class="error" ng-show="form1.duedate.$error.required">Due date can not be blank.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Invite team: <span class="text-danger">*</span></label>
+                        <ui-select name="select" required ng-model="project.selectedTeam" theme="bootstrap">
+                            <ui-select-match placeholder=" Select one team...">{{$select.selected.name}}</ui-select-match>
+                            <ui-select-choices repeat="team in teams | propsFilter: {name: $select.search}"> Team {{team.name}} - Owner: {{team.owner.name.first}} {{team.owner.name.last}}</ui-select-choices>
+                        </ui-select>
+                    </div>
+                    <div class="form-group text-right">
+                        <button type="reset" class="btn btn-outline dark"> Cancle</button>
+                        <button ng-disabled="form1.$invalid" type="submit" class="btn green"><i class="fa fa-check"></i> Add project</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4" ng-repeat="project in projects" ng-click="open(project)">
+                <div class="todo-tasklist">
+                    <div class="todo-tasklist-item todo-tasklist-item-border-green">
+                        <div class="todo-tasklist-item-title" style="font-size:22px;">{{project.name}} <span class="pull-right" style="font-size:13px;opacity:0.8;padding-top:5px;">by {{project.created_by.name.first}} {{project.created_by.name.last}}</span></div>
+                        <div class="todo-tasklist-item-text"> <span style="font-size:13px;color:#f00">{{project.description}}</span> </div>
+                        <div class="todo-tasklist-item-text">
+                            <span style="font-size:16px;">Team Implement:</span>
+                            <span class="pull-right" style="font-size:16px;text-decoration:underline">{{project.team_id.name}}</span>
+                        </div>
+                        <div class="todo-tasklist-item-text" style="margin-bottom:10px">
+                            <span class="pull-left" style="font-size:14px;"> Start date: {{project.start_date | date:'dd-MM-yyyy'}}</span>
+                            <span class="pull-right" style="font-size:14px;">Due date: {{project.due_date | date:'dd-MM-yyyy'}}</span>
+                        </div>
+                        <div class="todo-tasklist-controls" style="padding-top:25px;">
+                            <span class="todo-tasklist-date pull-left" style="margin-top:10px;">
+                                <i class="fa fa-calendar"></i> {{project.created_at | date:'dd-MM-yyyy HH:mm:ss'}} </span>
+                            <span ng-if="!active" class="btn btn-success pull-right"> Running...</span>
+                            <span ng-if="!active" class="btn red pull-right"> Expired</span>
+                            <span ng-if="active" class="btn btn-primary pull-right"> Waiting...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

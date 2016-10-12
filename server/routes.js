@@ -3,6 +3,8 @@ var Router = express.Router();
 var multer  = require('multer');
 var UserController = require('./controller/users.controller');
 var TeamController = require('./controller/teams.controller');
+var ProjectController = require('./controller/projects.controller');
+var TaskController = require('./controller/tasks.controller');
 var Middleware = require('./middleware/users');
 
 // user
@@ -33,12 +35,36 @@ var upload = multer({ storage : storage });
 Router.post('/user/upload',Middleware.handle, upload.any(), UserController.upload);
 
 // team
-Router.get('/team', TeamController.index);
+Router.get('/team', Middleware.handle, TeamController.index);
 Router.get('/team_processing/verify/confirm_join/:teamId', TeamController.verify);
 Router.get('/teamdetail_processing/verify/confirm_join/:teamId', TeamController.verify_DetailTeam);
 Router.post('/team', Middleware.handle, TeamController.add);
 Router.post('/thisteam/:id', Middleware.handle, TeamController.addmem);
+Router.put('/thisteam/name/:id', TeamController.updateTeamName);
+Router.put('/thisteam/desc/:id', TeamController.updateTeamDesc);
 Router.delete('/team/:id', TeamController.destroy);
+Router.delete('/thisteam/remove/:teamId/:memId', TeamController.destroyMem);
+
+//project
+Router.get('/project', ProjectController.index);
+Router.post('/project', Middleware.handle, ProjectController.add);
+Router.put('/project/:id', ProjectController.update);
+Router.put('/thisproject/name/:id', ProjectController.updateProjectName);
+Router.put('/thisproject/desc/:id', ProjectController.updateProjectDesc);
+Router.delete('/project/:id', ProjectController.destroy);
+
+//task
+Router.get('/tasks/:project_id', Middleware.handle, TaskController.index);
+Router.get('/task/project-detail/:id', TaskController.showAllMember);
+Router.post('/task', Middleware.handle, TaskController.addTask);
+Router.put('/task/priority-low/:id', TaskController.updatePriorityLow);
+Router.put('/task/priority-normal/:id', TaskController.updatePriorityNormal);
+Router.put('/task/priority-highest/:id', TaskController.updatePriorityHighest);
+Router.put('/task/status-resolved/:id', TaskController.updateStatusResolved);
+Router.put('/task/status-inprogress/:id', TaskController.updateStatusInprogress);
+Router.put('/thistask/name/:id', TaskController.updateTaskName);
+Router.put('/thistask/desc/:id', TaskController.updateTaskDesc);
+Router.delete('/task/:id', TaskController.destroy);
 
 module.exports = Router;
 

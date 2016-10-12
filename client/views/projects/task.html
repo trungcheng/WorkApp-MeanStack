@@ -1,0 +1,146 @@
+<div class="portlet light" ng-controller="TaskController" ng-init="alltask();allmems()">
+    <div class="portlet-title">
+        <div class="caption caption-md">
+            <i class="icon-globe theme-font hide"></i>
+            <span class="caption-subject font-blue-madison bold uppercase">TASK GROUP</span>
+        </div>
+        <div class="actions">
+            <button ng-if="display" ng-click="display1.addTask =! display1.addTask" class="btn green"><i class="fa fa-plus"></i> Add task</button>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div class="row" ng-if="display1.addTask">
+            <div class="col-md-8 col-md-offset-2">
+                <form role="form" novalidate ng-submit="add()" name="form1">
+                    <div class="form-group">
+                        <label for="">Task name: <span class="text-danger">*</span></label>
+                        <input type="text" placeholder="Task name..." class="form-control" ng-model="task.name" name="taskname" required />
+                        <div ng-show="form1.$submitted || form1.taskname.$touched">
+                            <div class="error" ng-show="form1.taskname.$error.required">Task name can not be blank.</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Assign to: <span class="text-danger">*</span></label>
+                        <ui-select multiple required name="select" ng-model="task.selectedMember" theme="bootstrap">
+                            <ui-select-match placeholder=" Select members...">{{$item.name.first}} {{$item.name.last}}</ui-select-match>
+                            <ui-select-choices repeat="member in members | propsFilter: {name: $select.search}"> {{member.name.first}} {{member.name.last}}</ui-select-choices>
+                        </ui-select>
+                        <div ng-show="form.$submitted || form.select.$touched">
+                            <div class="error" ng-show="!team.selectedMember.length > 0">Choose member can not be blank.</div>
+                        </div>
+                    </div>
+                    <div class="form-group text-right">
+                        <button type="reset" class="btn btn-outline dark"> Cancle</button>
+                        <button ng-disabled="form1.$invalid" type="submit" class="btn green"><i class="fa fa-check"></i> Add task</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-striped">
+                    <tr>
+                        <th class="text-center">#</th>
+                        <th>Task Name</th>
+                        <th class="text-center">Priority</th>
+                        <th class="text-center">Lastest update</th>
+                        <th class="text-center">Status</th>
+                        <th class="text-center">Assigned user</th>
+                        <th class="text-center">Options</th>
+                    </tr>
+                    <tr ng-repeat="task in tasks">
+                        <td class="text-center"><div class="todo-tasklist-item-title">{{ $index + 1 }}</div></td>
+                        <td width="20%">
+                            <div id="taskname" ng-if="!task.isEditName" style="font-size:16px" class="todo-tasklist-item-title">
+                                {{task.name}}
+                                <a ng-if="display" ng-click="displayTaskName(task, $event)"><i class="icon-pencil"></i></a>
+                            </div>
+                            <div class="editName1" ng-if="task.isEditName">
+                                <input ng-model="task.newName" type="text" class="col-md-6" placeholder="Enter your task name" />
+                                <a ng-click="saveTaskName(task)" style="display:inline-block">
+                                    <i style="font-size:21px;line-height:26px" class="fa fa-check-circle"></i>
+                                </a>
+                                <a ng-click="cancelEditName(task)">
+                                    <i style="font-size:21px" class="fa fa-times-circle"></i>
+                                </a>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div id="taskdesc" ng-if="!task.isEditDesc" class="todo-tasklist-item-text">
+                                {{task.description}}
+                                <a ng-if="display" ng-click="displayTaskDesc(task)" style="font-size:14px;opacity:1 !important;"><i class="icon-pencil"></i></a> 
+                            </div>
+                            <div class="editDesc1" ng-if="task.isEditDesc">
+                                <input ng-model="task.newDesc" type="text" class="col-md-6" placeholder="Enter your task description" />
+                                <a ng-click="saveTaskDesc(task)" style="display:inline-block">
+                                    <i style="font-size:21px;line-height:26px" class="fa fa-check-circle"></i>
+                                </a>
+                                <a ng-click="cancelEditDesc(task)">
+                                    <i style="font-size:21px" class="fa fa-times-circle"></i>
+                                </a>
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <div class="dropdown">
+                              <button ng-if="task.priority == 0" class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown">Normal
+                              <span class="caret"></span></button>
+                              <button ng-if="task.priority == 1" class="btn btn-warning dropdown-toggle" type="button" data-toggle="dropdown">Low
+                              <span class="caret"></span></button>
+                              <button ng-if="task.priority == 2" class="btn btn-danger dropdown-toggle" type="button" data-toggle="dropdown">Highest
+                              <span class="caret"></span></button>
+                              <ul ng-if="display" class="dropdown-menu">
+                                <li class="text-center"><a ng-click="low(task._id)">Low</a></li>
+                                <li class="text-center"><a ng-click="normal(task._id)">Normal</a></li>
+                                <li class="text-center"><a ng-click="highest(task._id)">Highest</a></li>
+                              </ul>
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <div style="margin-top:5px;" class="todo-tasklist-item-title">
+                                <i class="fa fa-calendar"></i> {{task.updated_at | date:'dd-MM-yyyy'}}
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <div class="dropdown">
+                              <button ng-if="task.status == 1" class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Resolved
+                              <span class="caret"></span></button>
+                              <button ng-if="task.status == 0" class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">In progress
+                              <span class="caret"></span></button>
+                              <ul ng-if="display" class="dropdown-menu">
+                                <li class="text-center"><a ng-click="resolved(task)">Resolved</a></li>
+                                <li class="text-center"><a ng-click="progress(task)">In progress</a></li>
+                              </ul>
+                            </div>
+                        </td>
+                        <td class="text-center" width="25%">
+                            <div class="todo-tasklist-item-title">
+                                <div ng-if="!task.displayMem" class="wrapper">
+                                    <img class="todo-userpic text-center" ng-repeat="avatarMem in task.assign_to | limitTo:avatarNum" ng-src="/server/{{avatarMem.avatar}}" width="35px" height="35px">
+                                    <a ng-if="display" ng-click="displayEditMem(task)"><i class="fa fa-plus"></i></a>
+                                </div>
+                                <div style="text-align:center;" ng-init="filterMem(task)" ng-if="task.displayMem" class="form-group">
+                                    <ui-select style="width:84%;height:34px;display:inline-flex" multiple required name="select" ng-model="task.selectedMember" theme="bootstrap">
+                                        <ui-select-match placeholder=" Select members...">{{$item.name.first}} {{$item.name.last}}</ui-select-match>
+                                        <ui-select-choices repeat="mem in memFilters">{{mem.name.first}} {{mem.name.last}}</ui-select-choices>
+                                    </ui-select>
+                                    <a ng-click="saveMem(task)"><i style="font-size:21px" class="fa fa-check-circle"></i></a>
+                                    <a ng-click="rollBackMem(task)"><i style="font-size:21px" class="fa fa-times-circle"></i></a>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <div class="dropdown">
+                                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+                                <i class="fa fa-bars"></i>
+                                <span class="caret"></span></button>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#">Task detail</a></li>
+                                    <li ng-if="display"><a ng-click="removeTask(task._id, $index)">Remove task</a></li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

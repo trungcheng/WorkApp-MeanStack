@@ -11,26 +11,34 @@
     <div class="portlet-body">
         <div class="row" ng-if="display.addTeam">
             <div class="col-md-12">
-                <form role="form" novalidate ng-submit="add()">
+                <form role="form" ng-submit="add()" name="form" novalidate>
                     <div class="form-group">
                         <label for="">Team name: <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" ng-model="team.name" name="teamname" />
+                        <input type="text" class="form-control" name="teamname" placeholder="Team name..." required ng-model="team.name" name="teamname" />
+                        <div ng-show="form.$submitted || form.teamname.$touched">
+                            <div class="error" ng-show="form.teamname.$error.required">Team name can not be blank.</div>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="">Description: <span class="text-danger">*</span></label>
-                        <textarea class="form-control" ng-model="team.description" rows="10"></textarea>
+                        <textarea class="form-control" name="teamdesc" placeholder="Team description..." required ng-model="team.description" rows="5"></textarea>
+                        <div ng-show="form.$submitted || form.teamdesc.$touched">
+                            <div class="error" ng-show="form.teamdesc.$error.required">Team description can not be blank.</div>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="">Invite member: <span class="text-danger">*</span></label>
-                        <ui-select multiple ng-model="team.selectedMember" theme="bootstrap">
-                            <ui-select-match placeholder="Select person...">{{$item.name.first}} {{$item.name.last}}</ui-select-match>
+                        <ui-select multiple required name="select" ng-model="team.selectedMember" theme="bootstrap">
+                            <ui-select-match placeholder=" Select members...">{{$item.name.first}} {{$item.name.last}}</ui-select-match>
                             <ui-select-choices repeat="member in members | propsFilter: {name: $select.search}"> {{member.name.first}} {{member.name.last}}</ui-select-choices>
                         </ui-select>
-                        <!-- <p>Selected: {{team.selectedmember}}</p> -->
+                        <div ng-show="form.$submitted || form.select.$touched">
+                            <div class="error" ng-show="!team.selectedMember.length > 0">Invite members can not be blank.</div>
+                        </div>
                     </div>
                     <div class="form-group text-right">
                         <button type="reset" class="btn btn-outline dark"> Cancle</button>
-                        <button type="submit" class="btn green"><i class="fa fa-check"></i> Add team</button>
+                        <button ng-disabled="form.$invalid || !team.selectedMember.length > 0" type="submit" class="btn green"><i class="fa fa-check"></i> Add team</button>
                     </div>
                 </form>
             </div>
@@ -39,9 +47,9 @@
             <div class="col-md-4" ng-repeat="team in teams" ng-click="open(team)">
                 <div class="todo-tasklist">
                     <div class="todo-tasklist-item todo-tasklist-item-border-green">
-                        <div class="todo-tasklist-item-title" style="font-size:20px;">{{team.name}} <span class="pull-right" style="font-size:13px;opacity:0.8;padding-top:5px;">by {{team.owner.name.first}} {{team.owner.name.last}}</span></div>
+                        <div class="todo-tasklist-item-title" style="font-size:22px;">{{team.name}} <span class="pull-right" style="font-size:13px;opacity:0.8;padding-top:5px;">by {{team.owner.name.first}} {{team.owner.name.last}}</span></div>
                         <div class="todo-tasklist-item-title">
-                            <img class="todo-userpic pull-left" ng-repeat="avatarMem in team.members | limitTo:avatarNum" ng-src="/server/{{avatarMem.avatar}}" width="32px" height="32px">
+                            <img class="todo-userpic pull-left" ng-repeat="avatarMem in team.members | limitTo:avatarNum" ng-src="/server/{{avatarMem.avatar}}" width="35px" height="35px">
                             <span class="pull-right" style="font-size:13px;opacity:0.8;padding-top:5px;">{{team.members.length}} mem</span>
                         </div>
                         <div class="clearfix"></div>

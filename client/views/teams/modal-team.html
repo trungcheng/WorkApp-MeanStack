@@ -1,14 +1,27 @@
-<div ng-init="alluser()">
+<div ng-init="alluser()" id="edit-modal">
 	<div class="modal-header">
-        <h3 class="modal-title" id="modal-title">{{team.name}} Team - <span style="font-size:16px;opacity:0.7">{{team.description}}</span></h3>
+        <h3 class="modal-title" ng-if="teamName" id="modal-title">{{team.name}} <a ng-if="display" ng-click="displayTeamName()"><i class="icon-pencil"></i></a></h3>
+        <div class="editName" ng-if="!teamName">
+        	<input ng-model="team.newName" type="text" class="col-md-6" placeholder="Enter your team name" />
+        	<button ng-click="saveTeamName()" style="display:inline-block" class="btn green">Save</button>
+        	<button ng-click="cancelEditName()" class="btn btn-outline dark">Cancel</button>
+        </div>
+        <span ng-if="display" ng-click="removeTeam()" style="position:absolute;right:15px;top:20px;z-index:9999999;" class="btn red pull-right"><i class="fa fa-trash"></i> Delete</span>
+        <h5 id="modal-desc" ng-if="teamDesc" style="opacity:0.5">{{team.description}} <a ng-if="display" ng-click="displayTeamDesc()" style="font-size:14px;opacity:1 !important;"><i class="icon-pencil"></i></a></h5>
+        <div class="editDesc" ng-if="!teamDesc">
+        	<input ng-model="team.newDesc" type="text" class="col-md-6" placeholder="Enter your team description" />
+        	<button ng-click="saveTeamDesc()" style="display:inline-block" class="btn green">Save</button>
+        	<button ng-click="cancelEditDesc()" class="btn btn-outline dark">Cancel</button>
+        </div>
     </div>
     <div class="modal-body" id="modal-body">
     	<div class="todo-tasklist-item-title" style="font-size:17px;">
     	<img ng-src="/server/{{team.owner.avatar}}" style="margin-right:5px;" width="50px" height="50px"> Administrator: {{team.owner.name.first}} {{team.owner.name.last}}</div>
 		<form role="form">
-			<div class="todo-tasklist-item-title" style="font-size:17px;margin-bottom:-10px;">List members:</div>
+			<div style="font-size:17px;margin-bottom:5px;">List members:</div>
 			<table class="table table-hover table-stripped">
 				<tr>
+					<th>#</th>
 					<th>Avatar</th>
 					<th>Name</th>
 					<th>Email</th>
@@ -17,16 +30,30 @@
 					<th ng-if="display">Actions</th>
 				</tr>
 				<tr ng-repeat="member in team.members">
+					<td>{{ $index + 1 }}</td>
 					<td>
 						<img ng-src="/server/{{member.avatar}}" width="32px" height="32px">
 					</td>
-					<td>{{member.name.first}} {{member.name.last}}</td>
+					<td width="15%">{{member.name.first}} {{member.name.last}}</td>
 					<td>{{member.email}}</td>
-					<td>{{member.address}}</td>
+					<td width="20%">{{member.address}}</td>
 					<td>{{member.phone}}</td>
 					<td>
-						<button ng-if="display" class="btn btn-primary"><i class="fa fa-edit"></i></button>
-						<button ng-if="display" class="btn btn-danger"><i class="fa fa-trash"></i></button>
+						<button ng-click="removeMem(member)" ng-if="display" class="btn btn-danger">X</button>
+					</td>
+				</tr>
+				<tr ng-repeat="mem in team.members_processing">
+					<td>{{ $index + team.members.length + 1 }}</td>
+					<td>
+						<img ng-src="/server/{{mem.avatar}}" width="32px" height="32px">
+					</td>
+					<td width="20%">{{mem.name.first}} {{mem.name.last}}</td>
+					<td>{{mem.email}}</td>
+					<td width="20%">{{mem.address}}</td>
+					<td>{{mem.phone}}</td>
+					<td width="25%">
+						<button ng-click="removeMemStatus(mem)" class="btn btn-danger">X</button>
+						<button class="btn btn-primary">Processing...</button>
 					</td>
 				</tr>
 			</table>

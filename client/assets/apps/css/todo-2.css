@@ -90,14 +90,17 @@ div .todo-tasklist-item:hover {
   background-color: #edf7f9; }
 
 .todo-tasklist-item img {
-  margin: 0 10px 10px 0; }
+  margin: 0 5px 10px 0; }
 
 .todo-tasklist-item-title {
   font-size: 15px;
   color: #2b4a5c;
   font-weight: 600;
-  padding-top: 3px;
-  padding-bottom: 13px; }
+  padding-top: 0px;
+  padding-bottom: 0px; }
+
+.todo-tasklist-item-title img {
+  margin: 0 5px 10px 0; }
 
 .todo-tasklist-item-text {
   font-size: 13px;

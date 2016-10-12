@@ -1,0 +1,31 @@
+.icon-pencil{
+	color:#000;
+}
+#taskname a{
+	display:none;
+	padding-left:10px;
+	font-size:16px;
+	text-decoration: none;
+}
+#taskname:hover a{
+	display:inline-flex;
+}
+.editName1 input{
+	height:26px;
+	margin-right:10px;
+	border: 1px solid green;
+}
+#taskdesc a{
+	display:none;
+	padding-left:10px;
+	font-size:12px;
+	text-decoration: none;
+}
+#taskdesc:hover a{
+	display:inline-flex;
+}
+.editDesc1 input{
+	height:26px;
+	margin-right:10px;
+	border: 1px solid green;
+}

@@ -1,0 +1,67 @@
+<div id="edit-modal">
+	<div class="modal-header">
+        <h3 class="modal-title" ng-if="projectName" id="modal-title">{{project.name}} <a ng-if="display" ng-click="displayProjectName()"><i class="icon-pencil"></i></a></h3>
+        <div class="editName" ng-if="!projectName">
+        	<input ng-model="project.newName" type="text" class="col-md-6" placeholder="Enter your project name" />
+        	<button ng-click="saveProjectName()" style="display:inline-block" class="btn green">Save</button>
+        	<button ng-click="cancelEditName()" class="btn btn-outline dark">Cancel</button>
+        </div>
+        <span ng-if="display" ng-click="removeProject()" style="position:absolute;right:15px;top:20px;z-index:9999999;" class="btn red pull-right"><i class="fa fa-trash"></i> Delete</span>
+        <h5 ng-if="projectDesc" id="modal-desc" style="opacity:0.7">{{project.description}} <a ng-if="display" ng-click="displayProjectDesc()" style="font-size:14px;opacity:1 !important;"><i class="icon-pencil"></i></a></h5>
+        <div class="editDesc" ng-if="!projectDesc">
+        	<input ng-model="project.newDesc" type="text" class="col-md-6" placeholder="Enter your project description" />
+        	<button ng-click="saveProjectDesc()" style="display:inline-block" class="btn green">Save</button>
+        	<button ng-click="cancelEditDesc()" class="btn btn-outline dark">Cancel</button>
+        </div>
+    </div>
+    <form role="form" novalidate ng-submit="update()">
+    <div class="modal-body" id="modal-body">
+    	<div class="todo-tasklist-item-title" style="font-size:16px;">
+    		Team implement: {{project.team_id.name}}
+    		<!-- <select name="singleSelect" id="singleSelect" ng-model="project.status">
+		      	<option value="">---Please select---</option>
+		      	<option value="{{data.option1}}">Option 1</option>
+		      	<option value="option-2">Option 2</option>
+		    </select> -->
+		    <a ng-click="closeModal()" class="btn btn-success pull-right">View task</a>
+    	</div>
+    	<div class="row" style="margin-top:17px;">
+            <div class="col-md-6">
+                <label for="">Start date:</label>
+                <p class="input-group" style="margin-top:5px !important">
+                    <input placeholder="Project start date..." type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="project.start_date" is-open="start.opened" min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" name="startdate" />
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="openstart()"><i class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
+                </p>
+                <div ng-show="form1.$submitted || form1.startdate.$touched">
+                    <div class="error" ng-show="form1.startdate.$error.required">Start date can not be blank.</div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <label for="">Due date:</label>
+                <p class="input-group" style="margin-top:5px !important">
+                    <input placeholder="Project due date..." type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="project.due_date" is-open="due.opened" min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" name="duedate" />
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="opendue()"><i class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
+                </p>
+                <div ng-show="form1.$submitted || form1.duedate.$touched">
+                    <div class="error" ng-show="form1.duedate.$error.required">Due date can not be blank.</div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group" style="margin-top:-6px !important">
+            <label for="">Invite other team: <span class="text-danger">*</span></label>
+            <ui-select name="select" required ng-model="project.selectedTeam" theme="bootstrap">
+                <ui-select-match placeholder=" Select one team...">{{$select.selected.name}}</ui-select-match>
+                <ui-select-choices repeat="team in teams | propsFilter: {name: $select.search}"> Team {{team.name}} - Owner: {{team.owner.name.first}} {{team.owner.name.last}}</ui-select-choices>
+            </ui-select>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button ng-if="display" class="btn btn-success" type="submit"><i class="fa fa-check"></i> Save</button>
+        <button class="btn btn-outline dark" type="button" ng-click="cancel()">Close</button>
+    </div>
+    </form>
+</div>

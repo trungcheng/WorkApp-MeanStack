@@ -10,7 +10,7 @@ var UserSchema = new mongoose.Schema({
 	address: String,
 	avatar: {type: String, default: null},
 	password: {type: String, required: true},
-	teams: {type: Array},
+	teams: [],
 	active: {type: Boolean, default: false},
 	created_at: {type:Date, default: Date.now},
 	updated_at: {type:Date, default: Date.now},

@@ -1,8 +1,10 @@
 /* Monster App */
 
 var SteedOfficeApp = angular.module('SteedOfficeApp', [
-    "ui.router", 
+    "ui.router",
     "ui.bootstrap",
+    "ui.bootstrap.datetimepicker",
+    "uiSwitch",
     "oc.lazyLoad",
     "ui.select",
     "ngSanitize",

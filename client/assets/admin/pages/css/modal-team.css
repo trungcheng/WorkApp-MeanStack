@@ -1,0 +1,31 @@
+.icon-pencil{
+	color:#f00;
+}
+#modal-title a{
+	display:none;
+	padding-left:10px;
+	font-size:19px;
+	text-decoration: none;
+}
+#modal-title:hover a{
+	display:inline;
+}
+.editName input{
+	height:34px;
+	margin-right:10px;
+	border: 1px solid green;
+}
+#modal-desc a{
+	display:none;
+	padding-left:10px;
+	font-size:19px;
+	text-decoration: none;
+}
+#modal-desc:hover a{
+	display:inline-flex;
+}
+.editDesc input{
+	height:34px;
+	margin-right:10px;
+	border: 1px solid green;
+}
