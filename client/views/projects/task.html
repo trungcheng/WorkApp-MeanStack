@@ -5,7 +5,7 @@
             <span class="caption-subject font-blue-madison bold uppercase">TASK GROUP</span>
         </div>
         <div class="actions">
-            <button ng-if="display" ng-click="display1.addTask =! display1.addTask" class="btn green"><i class="fa fa-plus"></i> Add task</button>
+            <button ng-show="display" ng-click="display1.addTask =! display1.addTask" class="btn green"><i class="fa fa-plus"></i> Add task</button>
         </div>
     </div>
     <div class="portlet-body">
@@ -38,7 +38,7 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                <table class="table table-striped">
+                <table class="table table-striped table-hover">
                     <tr>
                         <th class="text-center">#</th>
                         <th>Task Name</th>
@@ -51,9 +51,11 @@
                     <tr ng-repeat="task in tasks">
                         <td class="text-center"><div class="todo-tasklist-item-title">{{ $index + 1 }}</div></td>
                         <td width="20%">
-                            <div id="taskname" ng-if="!task.isEditName" style="font-size:16px" class="todo-tasklist-item-title">
-                                {{task.name}}
-                                <a ng-if="display" ng-click="displayTaskName(task, $event)"><i class="icon-pencil"></i></a>
+                            <div id="taskname" ng-if="!task.isEditName">
+                                <div class="contentTask" style="font-size:16px" class="todo-tasklist-item-title">
+                                    {{task.name}}
+                                </div>
+                                <a ng-if="display" ng-click="displayTaskName(task)"><i class="icon-pencil"></i></a>
                             </div>
                             <div class="editName1" ng-if="task.isEditName">
                                 <input ng-model="task.newName" type="text" class="col-md-6" placeholder="Enter your task name" />
@@ -64,19 +66,11 @@
                                     <i style="font-size:21px" class="fa fa-times-circle"></i>
                                 </a>
                             </div>
-                            <div class="clearfix"></div>
-                            <div id="taskdesc" ng-if="!task.isEditDesc" class="todo-tasklist-item-text">
-                                {{task.description}}
-                                <a ng-if="display" ng-click="displayTaskDesc(task)" style="font-size:14px;opacity:1 !important;"><i class="icon-pencil"></i></a> 
-                            </div>
-                            <div class="editDesc1" ng-if="task.isEditDesc">
-                                <input ng-model="task.newDesc" type="text" class="col-md-6" placeholder="Enter your task description" />
-                                <a ng-click="saveTaskDesc(task)" style="display:inline-block">
-                                    <i style="font-size:21px;line-height:26px" class="fa fa-check-circle"></i>
-                                </a>
-                                <a ng-click="cancelEditDesc(task)">
-                                    <i style="font-size:21px" class="fa fa-times-circle"></i>
-                                </a>
+                            <div class="icon-taskdesc">
+                                <i class="fa fa-eye" title="You are subcribed to this task"></i>
+                                <i ng-if="task.description != ''" class="fa fa-align-left" title="This task has a description"></i>
+                                <i class="fa fa-comment-o" title="Task comments"></i> <span style="margin-left:-14px;margin-right:13px;">{{task.comments.length}}</span>
+                                <i ng-if="task.due_date != ''" class="fa fa-clock-o" title="This task is due later."></i>
                             </div>
                         </td>
                         <td class="text-center">
@@ -114,7 +108,7 @@
                         <td class="text-center" width="25%">
                             <div class="todo-tasklist-item-title">
                                 <div ng-if="!task.displayMem" class="wrapper">
-                                    <img class="todo-userpic text-center" ng-repeat="avatarMem in task.assign_to | limitTo:avatarNum" ng-src="/server/{{avatarMem.avatar}}" width="35px" height="35px">
+                                    <a ng-repeat="avatarMem in task.assign_to | limitTo:avatarNum" title="Are you sure ?" message="Are you really want to delete this member ?" mwl-confirm placement="bottom" confirm-text="Yes <i class='glyphicon glyphicon-ok'></i>" cancel-text="No <i class='glyphicon glyphicon-remove'></i>" confirm-button-type="danger" on-confirm="removeMem(task, avatarMem, $index)"><img class="todo-userpic text-center" ng-src="/server/{{avatarMem.avatar}}" width="35px" height="35px"></a>
                                     <a ng-if="display" ng-click="displayEditMem(task)"><i class="fa fa-plus"></i></a>
                                 </div>
                                 <div style="text-align:center;" ng-init="filterMem(task)" ng-if="task.displayMem" class="form-group">
@@ -133,7 +127,7 @@
                                 <i class="fa fa-bars"></i>
                                 <span class="caret"></span></button>
                                 <ul class="dropdown-menu">
-                                    <li><a href="#">Task detail</a></li>
+                                    <li><a ng-click="open(task)">Task detail</a></li>
                                     <li ng-if="display"><a ng-click="removeTask(task._id, $index)">Remove task</a></li>
                                 </ul>
                             </div>

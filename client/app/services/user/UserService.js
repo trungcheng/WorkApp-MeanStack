@@ -1,5 +1,4 @@
 angular.module('SteedOfficeApp').service('UserService',function($http, ToastFactory, $state){
-
 	
 	this.uploadFileToUrl = function(file, uploadUrl){
         var fd = new FormData();
@@ -19,13 +18,5 @@ angular.module('SteedOfficeApp').service('UserService',function($http, ToastFact
         .error(function(){
         });
     }
-	// this.getIndex = function(){
-	// 	return $http.get(baseUrl);
-	// }
-
-	// this.postStore = function(data){
-	// 	return $http.post(baseUrl,data);
-	// }
-
 
 });

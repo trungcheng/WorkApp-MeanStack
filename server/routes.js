@@ -5,6 +5,8 @@ var UserController = require('./controller/users.controller');
 var TeamController = require('./controller/teams.controller');
 var ProjectController = require('./controller/projects.controller');
 var TaskController = require('./controller/tasks.controller');
+var CheckListController = require('./controller/checklists.controller');
+var FileController = require('./controller/file.controller');
 var Middleware = require('./middleware/users');
 
 // user
@@ -47,6 +49,7 @@ Router.delete('/thisteam/remove/:teamId/:memId', TeamController.destroyMem);
 
 //project
 Router.get('/project', ProjectController.index);
+Router.get('/project-detail/:project_id', ProjectController.showProject);
 Router.post('/project', Middleware.handle, ProjectController.add);
 Router.put('/project/:id', ProjectController.update);
 Router.put('/thisproject/name/:id', ProjectController.updateProjectName);
@@ -55,8 +58,12 @@ Router.delete('/project/:id', ProjectController.destroy);
 
 //task
 Router.get('/tasks/:project_id', Middleware.handle, TaskController.index);
+Router.get('/task/:task_id', TaskController.showTask);
 Router.get('/task/project-detail/:id', TaskController.showAllMember);
 Router.post('/task', Middleware.handle, TaskController.addTask);
+Router.post('/task/addMem/:id', TaskController.addMem);
+Router.post('/task/addcomment/:id', TaskController.addComment);
+Router.post('/task/attachments/:task_id', FileController.upload);
 Router.put('/task/priority-low/:id', TaskController.updatePriorityLow);
 Router.put('/task/priority-normal/:id', TaskController.updatePriorityNormal);
 Router.put('/task/priority-highest/:id', TaskController.updatePriorityHighest);
@@ -64,7 +71,20 @@ Router.put('/task/status-resolved/:id', TaskController.updateStatusResolved);
 Router.put('/task/status-inprogress/:id', TaskController.updateStatusInprogress);
 Router.put('/thistask/name/:id', TaskController.updateTaskName);
 Router.put('/thistask/desc/:id', TaskController.updateTaskDesc);
+Router.put('/thistask/startdate/:id', TaskController.updateStart);
+Router.put('/thistask/duedate/:id', TaskController.updateDue);
+Router.delete('/task/removeMem/:taskId/:memId', TaskController.removeMem);
+Router.delete('/task/removecomment/:taskId', TaskController.removeComment);
 Router.delete('/task/:id', TaskController.destroy);
+
+//checklists
+Router.get('/task/checklists/:task_id', CheckListController.index);
+Router.post('/task/checklist/:task_id', Middleware.handle, CheckListController.addCheckList);
+Router.post('/task/checklist/addTodo/:checklist_id', CheckListController.addTodo);
+Router.put('/task/checklist/completeTodo/:task_id/:item_id', CheckListController.completeTodo);
+Router.put('/task/checklist/unCompleteTodo/:task_id/:item_id', CheckListController.unCompleteTodo);
+Router.delete('/task/checklist/removeTodo/:task_id/:checklist_id/:item_id', CheckListController.destroyTodo);
+Router.delete('/task/removeCheckList/:checklist_id', CheckListController.destroy);
 
 module.exports = Router;
 

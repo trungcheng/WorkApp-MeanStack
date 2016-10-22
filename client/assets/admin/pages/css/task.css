@@ -1,9 +1,25 @@
 .icon-pencil{
 	color:#000;
 }
+#edit-modal{
+	background-color:#EDEFF0;
+	border-radius: 10px !important;
+	padding-left:0px;
+}
+#taskname{
+    width:215px !important;
+    display: inline-flex;
+}
+.contentTask{
+	max-width:200px !important;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
 #taskname a{
 	display:none;
 	padding-left:10px;
+	padding-top: 3px;
 	font-size:16px;
 	text-decoration: none;
 }
@@ -15,17 +31,146 @@
 	margin-right:10px;
 	border: 1px solid green;
 }
-#taskdesc a{
-	display:none;
-	padding-left:10px;
+.add-title{
+	font-weight:bold;
+	font-size:16px;
+	margin-top:8px !important;
+	margin-bottom:9px !important;
+}
+.icon-task{
+	padding-top:2px;
+	padding-right:5px;
+}
+.icon-taskdesc, .icon-taskdesc i{
+	opacity:0.7;
 	font-size:12px;
-	text-decoration: none;
+	padding-right:15px;
 }
-#taskdesc:hover a{
-	display:inline-flex;
+.function:hover{
+	background-color:#286090 !important;
+	color:#fff;
 }
-.editDesc1 input{
-	height:26px;
-	margin-right:10px;
-	border: 1px solid green;
+.comment{
+	padding:10px;
+	width:612px !important;
+	height:100px !important;
+	box-shadow: 1px 1px 1px !important;
+	display:inline !important;
+	border:none;
+}
+.comments-line{
+	margin-top:30px;
+}
+.comment-inner{
+	margin-top:5px;
+	padding-bottom:30px;
+	border-bottom:1px solid #D6D1D1;
+}
+.comment-inner span{
+	padding-left:5px;
+	font-weight:700;
+}
+.comment-inner a{
+	color:#000;
+	opacity:0.5;
+	font-size:12px;
+	padding-right:10px;
+	padding-top:3px;
+	padding-bottom:10px;
+	text-decoration: underline;
+}
+.comment-content{
+	background:#fff;
+	padding:5px;
+}
+.members{
+	position:relative;
+	margin-bottom: 10px;
+}
+.start1{
+	position:absolute;
+	top:10px;left:34%;
+	width:25%;
+}
+.start1 input{
+	width:64%;
+	display:inline;
+}
+.start1 h5{
+	display:inline;
+}
+.start1 h5 a{
+	display:none;
+	margin-left:5px;
+}
+.start1 h5:hover a{
+	display:inline-block;
+}
+.savestart{
+	display:inline;
+	float:right;
+}
+.due{
+	position:absolute;
+	top:10px;left:65%;
+	width:25%;
+}
+.due input{
+	width:64%;
+	display:inline;
+}
+.due h5{
+	display:inline;
+}
+.due h5 a{
+	display:none;
+	margin-left:5px;
+}
+.due h5:hover a{
+	display:inline-block;
+}
+.savedue{
+	display:inline;
+	float:right;
+}
+.bg-date{
+	text-align: center;
+	background:#337ab7;
+	margin-top:5px;
+	height:34px;
+	width:60%;
+}
+.bg-date span{
+	color:#fff;
+	line-height:34px;
+	margin-top:0px;
+}
+.bg-date1{
+	text-align: center;
+	background:#CF513D;
+	margin-top:5px;
+	height:34px;
+	width:60%;
+}
+.bg-date1 span{
+	color:#fff;
+	line-height:34px;
+	margin-top:0px;
+}
+.panel{
+	margin-bottom:10px !important;
+	margin-top:10px;
+}
+.progress{
+	margin-bottom:5px !important;
+}
+.progress-status{
+	margin-bottom: 35px;
+}
+.progress-status span{
+	opacity:0.5;
+}
+.todoChecked{
+	text-decoration:line-through;
+	color:#999;
 }

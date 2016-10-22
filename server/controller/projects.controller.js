@@ -14,6 +14,13 @@ var ProjectController = {
 			})
 	},
 
+	showProject: function(req, res){
+		Project.findOne({_id:req.params.project_id}, function(err, result){
+			if(err) throw err;
+			res.json({status: true, data: result, message:'Show project success'});
+		})
+	},
+
 	add: function(req, res){
 		// console.log(req.body);
 		var name = req.body.name || '';

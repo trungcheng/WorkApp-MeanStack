@@ -18,7 +18,11 @@
   "homepage": "https://github.com/trungcheng/Mean-Stack-Pro#readme",
   "dependencies": {
     "angular": "1.4.7",
+    "angular-bootstrap-confirm": "^2.4.1",
     "angular-cookies": "^1.5.8",
+    "angular-file-upload": "^2.3.4",
+    "angular-sanitize": "^1.5.8",
+    "angular-summernote": "^0.8.1",
     "angular-ui-router": "^0.3.1",
     "angular-ui-switch": "^0.1.1",
     "angular-validation": "^1.4.2",
@@ -38,6 +42,7 @@
     "mongoose": "^4.5.3",
     "mongoose-integer": "^0.1.1",
     "multer": "^1.2.0",
+    "ng-file-upload": "^12.2.12",
     "nodemailer": "~0.7.1",
     "nodemailer-smtp-transport": "~1.0.3",
     "underscore": "^1.8.3"

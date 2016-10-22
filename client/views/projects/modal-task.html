@@ -1,0 +1,246 @@
+<div id="edit-modal" ng-init="allCheckList();">
+	<div class="modal-header">
+        <i style="margin-right:10px;font-size:20px;" class="fa fa-credit-card"></i><h3 style="display:inline-block" class="modal-title" ng-if="!task.isEditName1" id="modal-title">{{task.name}} <a ng-click="displayTaskName1(task)" ng-if="display"><i class="icon-pencil"></i></a></h3>
+        <div class="editName" ng-if="task.isEditName1" style="width:80%;margin-left:-3px;display:inline-block">
+        	<input ng-model="task.newName1" type="text" class="col-md-9" placeholder="Enter your task name" />
+        	<button ng-click="saveTaskName1(task)" style="display:inline-block" class="btn green">Save</button>
+        	<button ng-click="cancelEditName1(task)" class="btn btn-outline dark">Cancel</button>
+        </div>
+        <button style="position:absolute;right:15px;top:15px;z-index:9999999;" class="btn btn-outline dark pull-right" type="button" ng-click="cancel()">Close</button>
+        <h5 style="opacity:0.7;padding-left:32px;margin-top:5px;">in list <u>{{channel}}</u></h5>
+    </div>
+    <div class="modal-body" id="modal-body" style="margin-top:-30px">
+        <div class="row">
+            <div class="col-md-9" style="padding-left:46px;">
+                <div class="members">
+                    <h5 style="opacity:0.7;width:30%">Members ({{task.assign_to.length}})</h5>
+                    <div ng-if="task.displayMem1" style="display:inline;position:absolute;top:0;left:106px;">
+                        <a ng-click="saveMem1(task)"><i style="font-size:21px" class="fa fa-check-circle"></i></a>
+                        <a ng-click="rollBackMem1(task)"><i style="font-size:21px" class="fa fa-times-circle"></i></a>
+                    </div>
+                    <div class="todo-tasklist-item-title">
+                        <div ng-if="!task.displayMem1" class="wrapper">
+                            <a ng-repeat="avatarMem in task.assign_to | limitTo:avatarNum" ng-click="removeMem(task, avatarMem, $index)"><img class="todo-userpic text-center" ng-src="/server/{{avatarMem.avatar}}" width="25px" height="25px"></a>
+                            <a ng-if="display" ng-click="displayEditMem1(task)"><i class="fa fa-plus"></i></a>
+                        </div>
+                        <div ng-init="filterMem(task)" ng-if="task.displayMem1">
+                            <ui-select style="width:24%;height:34px;display:inline-flex" multiple required name="select" ng-model="task.selectedMember" theme="bootstrap">
+                                <ui-select-match placeholder=" Select members...">{{$item.name.first}} {{$item.name.last}}</ui-select-match>
+                                <ui-select-choices repeat="mem in memFilters">{{mem.name.first}} {{mem.name.last}}</ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+                </div>
+                <div class="start1">
+                    <h5 style="opacity:0.7;">Start date <a ng-click="displayEditStart(task)" ng-if="display"><i class="icon-pencil"></i></a></h5>
+                    <div class="savestart" ng-if="task.isEditStart">
+                        <a ng-click="saveStart(task)"><i style="font-size:21px" class="fa fa-check-circle"></i></a>
+                        <a ng-click="cancelEditStart(task)"><i style="font-size:21px" class="fa fa-times-circle"></i></a>
+                    </div>
+                    <div class="bg-date" ng-if="!task.isEditStart">
+                        <span>{{task.start_date | date:'dd-MM-yyyy'}}</span>
+                    </div>
+                    <div ng-if="task.isEditStart" style="display:inline-flex;margin-top:3px">
+                        <p class="input-group" style="margin-top:0;width:100%">
+                            <input placeholder="Task start date..." type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="task.newStart" is-open="start.opened" min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" name="startdate" />
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="openstart()"><i class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
+                        </p>
+                    </div>
+                </div>
+                <div class="due">
+                    <h5 style="opacity:0.7;">Due date <a ng-click="displayEditDue(task)" ng-if="display"><i class="icon-pencil"></i></a></h5>
+                    <div ng-if="task.isEditDue" class="savedue">
+                        <a ng-click="saveDue(task)"><i style="font-size:21px" class="fa fa-check-circle"></i></a>
+                        <a ng-click="cancelEditDue(task)"><i style="font-size:21px" class="fa fa-times-circle"></i></a>
+                    </div>
+                    <div class="bg-date1" ng-if="!task.isEditDue">
+                        <span>{{task.due_date | date:'dd-MM-yyyy'}}</span>
+                    </div>
+                    <div ng-if="task.isEditDue" style="display:inline-flex;margin-top:3px">
+                        <p class="input-group" style="margin-top:0;width:100%">
+                            <input placeholder="Task due date..." type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="task.newDue" is-open="due.opened" min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" name="duedate" />
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="opendue()"><i class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
+                        </p>
+                    </div>
+                </div>
+            	<h5 style="display:inline;opacity:0.7" id="modal-desc"><i style="margin-right:10px;font-size:13px;" class="fa fa-align-left"></i><u>Edit the description</u><a ng-click="displayTaskDesc1(task)" ng-if="display"><i style="font-size:13px" class="icon-pencil"></i></a></h5>
+                <div ng-if="!task.isEditDesc1" data-ng-bind-html="task.description"></div>
+                <div ng-if="task.isEditDesc1">
+                    <summernote ng-model="task.newDesc1"></summernote>
+                    <button ng-click="saveTaskDesc1(task)" class="btn btn-primary">Save</button>
+                    <button ng-click="cancelEditDesc1(task)" class="btn btn-outline dark">Cancel</button>
+                </div>
+                <div class="attachment">
+                    <i style="margin-left:-31px;margin-right:10px;font-size:20px;" class="fa fa-paperclip"></i><h3 style="display:inline-block;font-size:23px;padding-left:5px;">Attachments</h3>
+                    <input multiple type="file" nv-file-select="" uploader="uploader" />
+                    <div class="table-scrollable table-scrollable-borderless">
+                    <table class="table table-hover table-light">
+                        <thead>
+                            <tr class="uppercase">
+                                <th width="50%">Name</th>
+                                <th ng-show="uploader.isHTML5">Size</th>
+                                <th ng-show="uploader.isHTML5">Progress</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="item in uploader.queue">
+                                <td>
+                                    <strong>{{ item.file.name }}</strong>
+                                </td>
+                                <td ng-show="uploader.isHTML5" nowrap>{{ item.file.size/1024/1024|number:2 }} MB</td>
+                                <td ng-show="uploader.isHTML5">
+                                    <div class="progress progress-sm" style="margin-bottom: 0;">
+                                        <div class="progress-bar progress-bar-info" role="progressbar" ng-style="{ 'width': item.progress + '%' }"></div>
+                                    </div>
+                                </td>
+                                <td class="text-center">
+                                    <span ng-show="item.isSuccess" class="text-success">
+                                        <i class="glyphicon glyphicon-ok"></i>
+                                    </span>
+                                    <span ng-show="item.isCancel" class="text-info">
+                                        <i class="glyphicon glyphicon-ban-circle"></i>
+                                    </span>
+                                    <span ng-show="item.isError" class="text-danger">
+                                        <i class="glyphicon glyphicon-remove"></i>
+                                    </span>
+                                </td>
+                                <td nowrap>
+                                    <button type="button" class="btn btn-success btn-xs" ng-click="item.upload()" ng-disabled="item.isReady || item.isUploading || item.isSuccess">
+                                        <span class="glyphicon glyphicon-upload"></span> Upload </button>
+                                    <button type="button" class="btn btn-warning btn-xs" ng-click="item.cancel()" ng-disabled="!item.isUploading">
+                                        <span class="glyphicon glyphicon-ban-circle"></span> Cancel </button>
+                                    <button type="button" class="btn btn-danger btn-xs" ng-click="item.remove()">
+                                        <span class="glyphicon glyphicon-trash"></span> Remove </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div>
+                    <p style="margin:10px 0 0;">Queue progress:</p>
+                        <div class="progress progress-sm" style="margin-bottom:10px !important">
+                            <div class="progress-bar progress-bar-info" role="progressbar" ng-style="{ 'width': uploader.progress + '%' }"></div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-success btn-s" ng-click="uploader.uploadAll()" ng-disabled="!uploader.getNotUploadedItems().length">
+                        <span class="glyphicon glyphicon-upload"></span> Upload all </button>
+                    <button type="button" class="btn btn-warning btn-s" ng-click="uploader.cancelAll()" ng-disabled="!uploader.isUploading">
+                        <span class="glyphicon glyphicon-ban-circle"></span> Cancel all </button>
+                    <button type="button" class="btn btn-danger btn-s" ng-click="uploader.clearQueue()" ng-disabled="!uploader.queue.length">
+                        <span class="glyphicon glyphicon-trash"></span> Remove all </button>
+                    </div>
+                </div>
+                
+                <i style="margin-left:-31px;margin-right:10px;font-size:20px;" class="fa fa-check-square-o"></i><h3 style="display:inline-block;font-size:23px;">Checklist</h3>
+                <div class="progress-info" ng-if="task.checklist_count.total != 0">
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{(task.checklist_count.done/task.checklist_count.total)*100}}"
+                            aria-valuemin="0" aria-valuemax="100" ng-style="{width :((task.checklist_count.done/task.checklist_count.total)*100 + '%' ) }">
+                        </div>
+                    </div>
+                    <div class="progress-status">
+                        <span class="pull-left">Progress</span>
+                        <span class="pull-right"> {{(task.checklist_count.done/task.checklist_count.total)*100}}% </span>
+                    </div>
+                </div>
+                <div class="progress-info" ng-if="task.checklist_count.total == 0">
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="0"
+                            aria-valuemin="0" aria-valuemax="100" ng-style="{width :(0 + '%' ) }">
+                        </div>
+                    </div>
+                    <div class="progress-status">
+                        <span class="pull-left">Progress</span>
+                        <span class="pull-right"> 0% </span>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <form ng-submit="addCheckList(task)">
+                    <div class="input-group">
+                        <div class="input-icon">
+                            <i class="fa fa-plus"></i>
+                            <input ng-model="checkList.name" type="text" class="form-control" placeholder="Add checklists...">
+                        </div>
+                        <span class="input-group-btn">
+                            <button type="submit" class="btn green" type="button"><i class="fa fa-check"></i></button>
+                        </span>
+                    </div>
+                </form>
+                <div class="panel panel-default" ng-repeat="item in checklists">
+                    <div class="panel-heading">{{item.name}} <a ng-click="removeCheckList(item, $index)"><i class="pull-right fa fa-trash-o" style="font-size:17px;"></i></a></div>
+                    <div class="panel-body">
+                        <div class="mt-checkbox-list">
+                            <label class="mt-checkbox mt-checkbox-outline" ng-repeat="todo in item.items">
+                                <i style="font-style:normal" ng-if="!todo.complete">{{todo.name}}</i>
+                                <i class="todoChecked" ng-if="todo.complete">{{todo.name}}</i>
+                                <input class="ipcb" type="checkbox" ng-model="todo.complete" ng-click="checkStatusTodo(task,todo)">
+                                <span></span>
+                                <a ng-click="removeTodo(task, item, todo, $index)"><i class="pull-right fa fa-trash-o" style="font-size:16px;"></i></a>
+                            </label>
+                        </div>
+                        <form ng-submit="addTodo(task, item)">
+                            <div class="input-group">
+                                <div class="input-icon">
+                                    <i class="fa fa-plus"></i>
+                                    <input ng-model="item.todo" type="text" class="form-control" placeholder="Add todo...">
+                                </div>
+                                <span class="input-group-btn">
+                                    <button type="submit" class="btn green" type="button"><i class="fa fa-check"></i></button>
+                                </span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <i style="margin-left:-31px;margin-right:10px;font-size:20px;" class="fa fa-comment-o"></i><h3 style="display:inline-block;font-size:23px;">Add Comment</h3>
+                <div class="clearfix"></div>
+                <img style="margin-left:-34px;margin-top:0px" class="todo-userpic text-center" ng-src="/server/{{userRoot.avatar}}" width="25px" height="25px">
+                <form ng-submit="addcomment(task)" style="margin-top:-30px;">
+                    <textarea ng-model="task.txtcomment" class="comment" placeholder="Write a comment..."></textarea>
+                    <div class="clearfix"></div>
+                    <button class="btn btn-primary" type="submit">Post</button>
+                </form>
+                <div class="clearfix"></div>
+                <div class="comments-line">
+                    <div class="comment-inner" ng-repeat="comment in task.comments">
+                        <img style="margin-left:-34px;margin-top:0px" class="todo-userpic text-center" ng-src="/server/{{userRoot.avatar}}" width="25px" height="25px">
+                        <span>{{userRoot.name.last}}</span>
+                        <div class="comment-content">{{comment}}</div>
+                        <a style="float:left;" ng-click="editItem(comment)">Edit</a>
+                        <a style="float:left;" ng-click="removeItem(task,comment,$index)">Delete</a>
+                        <input type="hidden" ng-model="comment">
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div class="col-md-3" style="width:21%;float:right;">
+                <p class="add-title">Add something</p>
+                <button ng-click="displayEditMem1(task)" class="function btn btn-block btn-default">
+                    <span class="icon-task fa fa-user pull-left"></span>
+                    <span class="pull-left"> Members</span>
+                </button>
+                <button class="function btn btn-block btn-default">
+                    <span class="icon-task fa fa-check-square-o pull-left"></span>
+                    <span class="pull-left"> Checklist</span>
+                </button>
+                <button ng-click="displayEditStart(task)" class="function btn btn-block btn-default">
+                    <span class="icon-task fa fa-clock-o pull-left"></span>
+                    <span class="pull-left"> Start date</span>
+                </button>
+                <button ng-click="displayEditDue(task)" class="function btn btn-block btn-default">
+                    <span class="icon-task fa fa-clock-o pull-left"></span>
+                    <span class="pull-left"> Due date</span>
+                </button>
+                <button class="function btn btn-block btn-default">
+                    <span class="icon-task fa fa-paperclip pull-left"></span>
+                    <span class="pull-left"> Attachment</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

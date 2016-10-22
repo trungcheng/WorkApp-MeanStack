@@ -8,10 +8,19 @@ angular.module('SteedOfficeApp').controller('TaskController', function($http, $r
 
     $scope.display = false;
 
-    $scope.displayTaskName = function(task, $event){
+    $http.get('/api/project-detail/'+$stateParams.id).success(function(response){
+        if(response.status){
+            if($rootScope.rootAuth._id == response.data.created_by){
+                $scope.display = true;
+            }else{
+                $scope.display = false;
+            }
+        }
+    })
+
+    $scope.displayTaskName = function(task){
         task.isEditName = true;
         task.newName = angular.copy(task.name);
-        $event.target.select();
     }
 
     $scope.cancelEditName = function(task){
@@ -87,25 +96,34 @@ angular.module('SteedOfficeApp').controller('TaskController', function($http, $r
         }());
     }
 
-    // $scope.open = function (project) {
-    //     var modalInstance = $uibModal.open({
-    //         animation: true,
-    //         templateUrl: '/client/views/projects/modal-project.html',
-    //         controller: 'ProjectModalController',
-    //         size: 'md',
-    //         resolve: {
-    //             project: function() {
-    //               return project;
-    //             }
-    //         }
-    //     });
+    $scope.removeMem = function(task, mem, index){
+        $http.delete('/api/task/removeMem/'+task._id+'/'+mem._id).success(function(response){
+            if(response.status){
+                ToastFactory.popSuccess(response.message);
+                task.assign_to.splice(index,1);
+            }
+        })
+    }
 
-    //     modalInstance.result.then(function (result) {
-    //         console.log(result);
-    //     }, function () {
+    $scope.open = function (task) {
+        var modalInstance = $uibModal.open({
+            animation: true,
+            templateUrl: '/client/views/projects/modal-task.html',
+            controller: 'TaskModalController',
+            size: 'lg',
+            resolve: {
+                task: function() {
+                  return task;
+                }
+            }
+        });
+
+        modalInstance.result.then(function (result) {
+            console.log(result);
+        }, function () {
            
-    //     });
-    // };
+        });
+    };
 
     $scope.add = function(){
         $scope.task.project_id = $stateParams.id;
@@ -123,17 +141,21 @@ angular.module('SteedOfficeApp').controller('TaskController', function($http, $r
         })
     }
 
+    $scope.saveMem = function(task){
+        $http.post('/api/task/addMem/'+task._id,{selectedMember:task.selectedMember}).success(function(response){
+            if(response.status){
+                ToastFactory.popSuccess(response.message);
+                $state.reload();
+            }else{
+                ToastFactory.popErrors(response.message);
+            }
+        })
+    }
+
     $scope.alltask = function(){
         $http.get('/api/tasks/'+$stateParams.id).success(function(response){
             if(response.status){
                 $scope.tasks = response.data;
-                response.data.forEach(function(item){
-                    if($rootScope.rootAuth._id == item.project_id.created_by){
-                        $scope.display = true;
-                    }else{
-                        $scope.display = false;
-                    }
-                })
             }
         })
     }

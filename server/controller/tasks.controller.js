@@ -3,6 +3,13 @@ var Project = require('../model/projects.model');
 var Team = require('../model/teams.model');
 var User = require('../model/users.model');
 var mongoose = require('mongoose');
+var event = require('events');
+
+var eventEmiter = new event.EventEmitter();
+
+eventEmiter.on('upload_success', function(file) {
+	TaskController.saveFileAttach(file);
+});
 
 var TaskController = {
 
@@ -20,6 +27,13 @@ var TaskController = {
 					res.json({status:true,data: result,message:'Get all task success'});
 				}
 			})
+	},
+
+	showTask: function(req, res){
+		Task.findOne({_id:req.params.task_id}, function(err, result){
+			if(err) throw err;
+			res.json({status:true, data:result, message:'Get this task success'})
+		})
 	},
 
 	showAllMember: function(req, res){
@@ -46,7 +60,7 @@ var TaskController = {
 	addTask: function(req, res){
 		var selectedMember = [];
 		var name = req.body.name;
-		var description = 'This is description demo';
+		var description = req.body.description || '';
 		var project_id = new mongoose.Types.ObjectId(req.body.project_id);
 
 		if(name != ''){
@@ -72,6 +86,34 @@ var TaskController = {
 		}else{
 			res.json({status: false, data: [], message: 'Validate failed'});
 		}
+	},
+
+	addMem: function(req, res){
+		var id = req.params.id;
+		Task.findOne({_id:id}, function(err, result){
+			if(req.body.selectedMember){
+				req.body.selectedMember.forEach(function(item){
+					result.assign_to.push(new mongoose.Types.ObjectId(item._id));
+				});
+				result.save(function(err, finalResult){
+					if(err) throw err;
+					res.json({status: true, data: finalResult, message:'Add member success'});
+				})
+			}else{
+				res.json({status: false, data: [], message:'Please select to member'});
+			}
+		})
+	},
+
+	addComment: function(req, res){
+		var id = req.params.id;
+		Task.findOne({_id:id}, function(err, result){
+			result.comments.push(req.body.txtcomment);
+			result.save(function(err, finalResult){
+				if(err) throw err;
+				res.json({status:true, data: finalResult, message:'Add comment success'});
+			})
+		})
 	},
 
 	updatePriorityLow: function(req, res){
@@ -147,6 +189,52 @@ var TaskController = {
 			result.save(function(err, saveresult){
 				if(err) throw err;
 				res.json({status: true,data:saveresult, message: 'Update task description success'})
+			})
+		})
+	},
+
+	updateStart: function(req, res){
+		var id = req.params.id;
+		Task.findOne({_id:id}, function(err, result){
+			result.start_date = req.body.newStart;
+			result.save(function(err, finalResult){
+				if(err) throw err;
+				res.json({status: true, data: finalResult, message:'Update start date success'});
+			})
+		})
+	},
+
+	updateDue: function(req, res){
+		var id = req.params.id;
+		Task.findOne({_id:id}, function(err, result){
+			result.due_date = req.body.newDue;
+			result.save(function(err, finalResult){
+				if(err) throw err;
+				res.json({status: true, data: finalResult, message:'Update due date success'});
+			})
+		})
+	},
+
+	removeMem: function(req, res){
+		var taskId = req.params.taskId;
+		var memId = req.params.memId;
+		Task.findOne({_id:taskId}, function(err, task){
+			task.assign_to.splice(memId,1);
+			task.save(function(err, finalTask){
+				if(err) throw err;
+				res.json({status:true, data:finalTask, message:'Remove member of task success'});
+			})
+		})
+	},
+
+	removeComment: function(req, res){
+		var taskId = req.params.taskId;
+		var commentIndex = req.body.cmt;
+		Task.findOne({_id:taskId}, function(err, result){
+			result.comments.splice(commentIndex,1);
+			result.save(function(err, finalResult){
+				if(err) throw err;
+				res.json({status: true, data: finalResult, message:'Remove comment success'});
 			})
 		})
 	},

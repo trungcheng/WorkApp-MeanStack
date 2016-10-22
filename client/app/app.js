@@ -5,6 +5,7 @@ var SteedOfficeApp = angular.module('SteedOfficeApp', [
     "ui.bootstrap",
     "ui.bootstrap.datetimepicker",
     "uiSwitch",
+    'angularFileUpload',
     "oc.lazyLoad",
     "ui.select",
     "ngSanitize",
@@ -14,6 +15,8 @@ var SteedOfficeApp = angular.module('SteedOfficeApp', [
     "ngCookies",
     'validation',
     'validation.rule',
+    'summernote',
+    'mwl.confirm',
 ]);
 
 // //AngularJS v1.3.x workaround for old style controller declarition in HTML
@@ -111,10 +114,12 @@ SteedOfficeApp.run(["$rootScope", "settings", "$state", function($rootScope, set
 SteedOfficeApp.run(function($rootScope, $state,$interval, $location, $http, $cookieStore,socket) {
     $rootScope.$state = $state;
     $rootScope.rootAuth = null;
+    $rootScope.rootAuthToken = null;
 
     $rootScope.$on('$stateChangeSuccess', function(event, toState) {
         $state.current = toState;
         $rootScope.rootAuth = $cookieStore.get('member');
+        $rootScope.rootAuthToken = $cookieStore.get('token');
         if ($rootScope.rootAuth == null || $rootScope.rootAuth == undefined) {
             if($state.current.name != 'access.register' && $state.current.name != 'access.password_reset'){
                 $location.path('access/login');
