@@ -8,11 +8,18 @@ var TaskSchema = new mongoose.Schema({
 	project_id: {type: mongoose.Schema.Types.ObjectId, ref:'Project'},
 	comments: [
 		{
-			user: {type: mongoose.Schema.Types.ObjectId, ref:'User'},
-			content: String
+			user_id: {type: mongoose.Schema.Types.ObjectId, index:true},
+			content: String,
+			created_at: {type: Date, default:Date.now}
 		}
 	],
-	file_attachs: {type: Array},
+	file_attachs: [
+		{
+			name: String,
+			path: String,
+			created_at: {type: Date, default: Date.now}
+		}
+	],
 	checklist_count: {
 		done: {type: Number, integer: true, default:0},
 		total: {type: Number, integer: true, default:0},

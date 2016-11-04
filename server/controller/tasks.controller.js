@@ -3,13 +3,16 @@ var Project = require('../model/projects.model');
 var Team = require('../model/teams.model');
 var User = require('../model/users.model');
 var mongoose = require('mongoose');
-var event = require('events');
+var events = require('events');
+var fs = require('fs');
+var path = require('path');
+var uploadPath = './public/attachments/';
 
-var eventEmiter = new event.EventEmitter();
+// var eventEmiter = new events.EventEmitter();
 
-eventEmiter.on('upload_success', function(file) {
-	TaskController.saveFileAttach(file);
-});
+// eventEmiter.on('upload_success', function(file) {
+// 	TaskController.saveFileAttach(file);
+// });
 
 var TaskController = {
 
@@ -80,6 +83,14 @@ var TaskController = {
 				if(err){
 					res.json({status: false, message:err});
 				}else{
+					if(!fs.existsSync(uploadPath + result._id)) {
+					    fs.mkdirSync(uploadPath + result._id, 0777, function(err){
+					    	if(err) throw err;
+					    	console.log('create dir success');
+					    });
+					}else{
+						console.log('Dir already exists');
+					}
 					res.json({status: true, data:result, message:'Add task success'});
 				}
 			})
@@ -105,15 +116,57 @@ var TaskController = {
 		})
 	},
 
+	allComment: function(req, res){
+		req.checkParams('task_id', 'PARAMS_IS_NOT_EMPTY').notEmpty();
+        req.checkParams('task_id', 'MONGO_ID_FORMAT_INVALID').isMongoId();
+        var errors = req.validationErrors();
+        if (errors){
+            res.json({status: false, message:'Validate failed'});
+        }else{
+        	var comments = [];
+        	Task.aggregate([
+	            { $match: { _id: new mongoose.Types.ObjectId(req.params.task_id) } },
+	            { $unwind: '$comments' },
+	            // { $match: { 'comments.father_id': null } },
+	            { $sort: { 'comments.created_at': -1 } },
+	            // { $limit: 5 },
+	            { $project: { comments: 1 } }, {
+	                $lookup: {
+	                    from: 'users',
+	                    localField: 'comments.user_id',
+	                    foreignField: '_id',
+	                    as: 'comments.users'
+	                }
+	            }
+	        ], function(err, results) {
+	            results.forEach(function(result, index) {
+	                comments.push(result.comments);
+	                if (index == results.length - 1) {
+						res.json({status: true, data: comments, message:'Get all comments success'});
+	                }
+	            });
+	        });
+        }
+	},
+
 	addComment: function(req, res){
-		var id = req.params.id;
-		Task.findOne({_id:id}, function(err, result){
-			result.comments.push(req.body.txtcomment);
-			result.save(function(err, finalResult){
-				if(err) throw err;
-				res.json({status:true, data: finalResult, message:'Add comment success'});
+		req.checkParams('task_id', 'PARAMS_IS_NOT_EMPTY').notEmpty();
+        req.checkParams('task_id', 'MONGO_ID_FORMAT_INVALID').isMongoId();
+        var errors = req.validationErrors();
+        if (errors){
+            res.json({status: false, message:'Validate failed'});
+        }else{
+			Task.findOne({_id:req.params.task_id}, function(err, result){
+				result.comments.push({
+					user_id: req.user._id,
+					content: req.body.txtcomment
+				});
+				result.save(function(err, finalResult){
+					if(err) throw err;
+					res.json({status:true, data: finalResult.comments, message:'Add comment success'});
+				})
 			})
-		})
+		}
 	},
 
 	updatePriorityLow: function(req, res){
@@ -186,7 +239,7 @@ var TaskController = {
 		var id = req.params.id;
 		Task.findOne({_id:id}, function(err, result){
 			result.description = req.body.desc;
-			result.save(function(err, saveresult){
+			result.save(function(err, saveresult){z
 				if(err) throw err;
 				res.json({status: true,data:saveresult, message: 'Update task description success'})
 			})
@@ -227,6 +280,12 @@ var TaskController = {
 		})
 	},
 
+	downloadFileAttach: function(req, res){
+		var pathName = req.query.path;
+		var pathCurrent = path.join(__dirname + '/../' + pathName);
+		res.download(pathCurrent);
+	},
+
 	removeComment: function(req, res){
 		var taskId = req.params.taskId;
 		var commentIndex = req.body.cmt;
@@ -237,6 +296,29 @@ var TaskController = {
 				res.json({status: true, data: finalResult, message:'Remove comment success'});
 			})
 		})
+	},
+
+	removeAttachFile: function(req, res){
+		req.checkParams('task_id', 'PARAMS_IS_NOT_EMPTY').notEmpty();
+        req.checkParams('task_id', 'MONGO_ID_FORMAT_INVALID').isMongoId();
+        req.checkParams('file_id', 'PARAMS_IS_NOT_EMPTY').notEmpty();
+        req.checkParams('file_id', 'MONGO_ID_FORMAT_INVALID').isMongoId();
+        var errors = req.validationErrors();
+        if(errors){
+            res.json({status:false, message:'Validate failed'});
+        }else{
+        	Task.findOne({_id:req.params.task_id}, function(err, result){
+        		result.file_attachs.forEach(function(item, index){
+        			if(item._id == req.params.file_id){
+        				result.file_attachs.splice(index,1);
+        				result.save(function(err, fileattach){
+        					if(err) throw err;
+        					res.json({status: true, data:fileattach.file_attachs, message:'Remove file attach success'});
+        				})
+        			}
+        		})
+        	})
+        }
 	},
 
 	destroy: function(req, res){

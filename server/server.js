@@ -5,6 +5,15 @@ var path = require('path');
 var bodyParser = require('body-parser');
 var app = express();
 var apiRoute = require('./routes');
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
+
+
+io.on('connection', function (socket) {
+  socket.on('send_message', function(message) {
+  	io.sockets.emit('new_message', message);
+  })
+});
 
 mongoose.connect('mongodb://localhost:27017/meanpro1', function(err){
 	if(err) throw err;
@@ -20,11 +29,10 @@ app.use('/server', express.static('../server'));
 app.use('/api', apiRoute);
 
 app.get('/', function(req, res){
-	// res.setHeader("Access-Control-Allow-Origin", "*");
 	res.sendFile('index.html', {root: '../client/'});
 });
 
-app.listen(3002, function(){
+server.listen(3002, function(){
 	console.log('App listening to http://localhost:3002');
 });
 

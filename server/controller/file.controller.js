@@ -1,14 +1,23 @@
-var event = require('events');
+var events = require('events');
 var multer  = require('multer');
+var Task = require('../model/tasks.model');
 
 var FileController = {
 
-	upload: function(req, res) {
-		var eventEmiter = new events.EventEmitter();
+	index: function(req, res) {
+		// var eventEmiter = new events.EventEmitter();
 		// Upload process.
-		console.log(req.body);
+		Task.findOne({_id:req.params.task_id}, function (err, result){
+			result.file_attachs.push({
+				name: req.files[0].originalname,
+				path: req.files[0].path
+			});
+			result.save(function (err, attach){
+				res.json({status: true, data:attach.file_attachs[attach.file_attachs.length-1], message:'Attach files success'});
+			})
+		})
 		// Done process
-		eventEmiter.emit('upload_success', {file: file});
+		// eventEmiter.('upload_success', {file: req.files, task_id:req.params.task_id});
 	}
 };
 

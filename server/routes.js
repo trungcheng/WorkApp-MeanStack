@@ -60,10 +60,23 @@ Router.delete('/project/:id', ProjectController.destroy);
 Router.get('/tasks/:project_id', Middleware.handle, TaskController.index);
 Router.get('/task/:task_id', TaskController.showTask);
 Router.get('/task/project-detail/:id', TaskController.showAllMember);
+Router.get('/task/attachments/download', TaskController.downloadFileAttach);
+Router.get('/task/comments/:task_id', TaskController.allComment);
 Router.post('/task', Middleware.handle, TaskController.addTask);
 Router.post('/task/addMem/:id', TaskController.addMem);
-Router.post('/task/addcomment/:id', TaskController.addComment);
-Router.post('/task/attachments/:task_id', FileController.upload);
+Router.post('/task/addcomment/:task_id', Middleware.handle, TaskController.addComment);
+
+var storage_task = multer.diskStorage({
+  	destination: function (req, file, cb) {
+    	cb(null, 'public/attachments/' + req.params.task_id);
+  	},
+  	filename: function (req, file, cb) {
+    	cb(null, Date.now() + "-" + file.originalname);
+  	}
+});
+var upload_attachments = multer({ storage : storage_task });
+
+Router.post('/task/attachments/:task_id', Middleware.handle, upload_attachments.any(), FileController.index);
 Router.put('/task/priority-low/:id', TaskController.updatePriorityLow);
 Router.put('/task/priority-normal/:id', TaskController.updatePriorityNormal);
 Router.put('/task/priority-highest/:id', TaskController.updatePriorityHighest);
@@ -75,6 +88,7 @@ Router.put('/thistask/startdate/:id', TaskController.updateStart);
 Router.put('/thistask/duedate/:id', TaskController.updateDue);
 Router.delete('/task/removeMem/:taskId/:memId', TaskController.removeMem);
 Router.delete('/task/removecomment/:taskId', TaskController.removeComment);
+Router.delete('/task/attachments/delete/:task_id/:file_id', TaskController.removeAttachFile);
 Router.delete('/task/:id', TaskController.destroy);
 
 //checklists
