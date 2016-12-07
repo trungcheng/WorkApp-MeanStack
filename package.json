@@ -44,7 +44,7 @@
     "multer": "^1.2.0",
     "ng-file-upload": "^12.2.12",
     "nodemailer": "~0.7.1",
-    "nodemailer-smtp-transport": "~1.0.3",
+    "nodemailer-smtp-transport": "^1.0.4",
     "underscore": "^1.8.3"
   },
   "devDependencies": {

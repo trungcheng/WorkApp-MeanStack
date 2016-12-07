@@ -239,8 +239,9 @@ var UserController = {
 			        html : "We heard that you lost your WorkApp password. Sorry about that !<br><br>But don’t worry! You can use the following link within the next day to reset your password:<br><br> Please Click on the link to reset your password.<br><a href="+link+">Click here to reset your password</a><br><br>Thanks,<br>Your friends at WorkApp"
 			    }
 
-			    smtpConfig.sendMail(mailOptions, function(err){
+			    smtpConfig.sendMail(mailOptions, function(err, response){
 				    if (err) throw err;
+				    console.log(response);
 				});
 
 				smtpConfig.close();
