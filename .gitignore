@@ -1,4 +1,5 @@
 /node_modules
+/server/public
 gulpfile.js
 .DS_Store
 *.txt

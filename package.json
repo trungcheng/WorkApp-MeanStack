@@ -1,5 +1,5 @@
 {
-  "name": "MeanStack_Project",
+  "name": "MeanStack-Tutorial",
   "version": "1.0.0",
   "description": "Author: trungs1bmt@gmail.com",
   "main": "index.js",
@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/trungcheng/Mean-Stack-Pro.git"
+    "url": "git+https://github.com/trungcheng/meanstack-tutorial.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/trungcheng/Mean-Stack-Pro/issues"
+    "url": "https://github.com/trungcheng/meanstack-tutorial/issues"
   },
-  "homepage": "https://github.com/trungcheng/Mean-Stack-Pro#readme",
+  "homepage": "https://github.com/trungcheng/meanstack-tutorial#readme",
   "dependencies": {
     "angular": "1.4.7",
     "angular-bootstrap-confirm": "^2.4.1",
