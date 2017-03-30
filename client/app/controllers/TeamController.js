@@ -1,4 +1,4 @@
-angular.module('SteedOfficeApp').controller('TeamController', function($http, $rootScope, $scope, $uibModal, $log, $state, $timeout, ToastFactory){
+angular.module('workApp').controller('TeamController', function($http, $rootScope, $scope, $uibModal, $log, $state, $timeout, ToastFactory){
 
     $scope.members = {};
 

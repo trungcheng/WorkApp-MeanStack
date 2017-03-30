@@ -44,7 +44,10 @@ TODO Page
     font-size: 14px !important; }
 
 .todo-tasklist {
-  padding: 0; }
+  padding: 0;
+  margin-bottom: 20px; 
+  box-shadow: 0 2px 1px #777;
+}
 
 .todo-project-list ul li a {
   font-size: 14px !important;

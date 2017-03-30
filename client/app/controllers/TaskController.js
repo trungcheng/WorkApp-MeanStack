@@ -1,4 +1,4 @@
-angular.module('SteedOfficeApp').controller('TaskController', function($http, $rootScope, $scope, $uibModal, $log, $state, $stateParams, $timeout, ToastFactory){
+angular.module('workApp').controller('TaskController', function($http, $rootScope, $scope, $uibModal, $log, $state, $stateParams, $timeout, ToastFactory){
 
     $scope.tasks = {};
 

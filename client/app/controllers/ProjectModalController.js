@@ -1,4 +1,4 @@
-angular.module('SteedOfficeApp').controller('ProjectModalController', function($http, $rootScope, $scope, $state, $modalInstance, project, ToastFactory){
+angular.module('workApp').controller('ProjectModalController', function($http, $rootScope, $scope, $state, $modalInstance, project, ToastFactory){
 
 	$scope.project = project;
 	$scope.display = false;

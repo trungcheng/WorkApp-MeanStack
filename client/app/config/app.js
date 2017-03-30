@@ -1,5 +1,5 @@
 /* Setup global settings */
-SteedOfficeApp.factory('settings', ['$rootScope', function($rootScope) {
+workApp.factory('settings', ['$rootScope', function($rootScope) {
     // supported languages
     var settings = {
         layout: {
@@ -19,7 +19,7 @@ SteedOfficeApp.factory('settings', ['$rootScope', function($rootScope) {
 }]);
 
 /* Setup config */ 
-SteedOfficeApp.factory('config', ['$rootScope', function($rootScope) {
+workApp.factory('config', ['$rootScope', function($rootScope) {
 
     var config = {
         enableClientAuthExpire: false, // if client not send request to server then auto invalidate token

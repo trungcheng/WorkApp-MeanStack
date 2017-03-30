@@ -1,6 +1,6 @@
 /* Monster App */
 
-var SteedOfficeApp = angular.module('SteedOfficeApp', [
+var workApp = angular.module('workApp', [
     "ui.router",
     "ui.bootstrap",
     "ui.bootstrap.datetimepicker",
@@ -19,48 +19,37 @@ var SteedOfficeApp = angular.module('SteedOfficeApp', [
     'mwl.confirm',
 ]);
 
-// //AngularJS v1.3.x workaround for old style controller declarition in HTML
-SteedOfficeApp.config(['$controllerProvider', function($controllerProvider) {
+// AngularJS v1.3.x workaround for old style controller declarition in HTML
+workApp.config(['$controllerProvider', function($controllerProvider) {
     // this option might be handy for migrating old apps, but please don't use it
     // in new ones!
     $controllerProvider.allowGlobals();
 }]);
 
-// /********************************************
-//  END: BREAKING CHANGE in AngularJS v1.3.x:
-//  *********************************************/
-
-// /* Setup connect Nodejs Sever */
-SteedOfficeApp.factory('socket',function(){
-    var socket = io.connect('http://103.7.40.9:6868');
-    return socket;
-});
-
-
-// /* Setup App Main Controller */
-SteedOfficeApp.controller('AppController', ['$scope', '$rootScope', function($scope, $rootScope) {
+/* Setup App Main Controller */
+workApp.controller('AppController', ['$scope', '$rootScope', function($scope, $rootScope) {
     $scope.$on('$viewContentLoaded', function() {
         App.initComponents(); // init core components
         //Layout.init(); //  Init entire layout(header, footer, sidebar, etc) on page load if the partials included in server side instead of loading with ng-include directive 
     });
 }]);
 
-// /* Setup Layout Part - Header */
-SteedOfficeApp.controller('HeaderController', ['$scope', function($scope) {
+/* Setup Layout Part - Header */
+workApp.controller('HeaderController', ['$scope', function($scope) {
     $scope.$on('$includeContentLoaded', function() {
         Layout.initHeader(); // init header
     });
 }]);
 
-// /* Setup Layout Part - Sidebar */
-SteedOfficeApp.controller('SidebarController', ['$scope', function($scope) {
+/* Setup Layout Part - Sidebar */
+workApp.controller('SidebarController', ['$scope', function($scope) {
     $scope.$on('$includeContentLoaded', function() {
         Layout.initSidebar(); // init sidebar
     });
 }]);
 
-// /* Setup Layout Part - Quick Sidebar */
-SteedOfficeApp.controller('QuickSidebarController', ['$scope', function($scope) {
+/* Setup Layout Part - Quick Sidebar */
+workApp.controller('QuickSidebarController', ['$scope', function($scope) {
     $scope.$on('$includeContentLoaded', function() {
         setTimeout(function(){
             QuickSidebar.init(); // init quick sidebar
@@ -68,26 +57,26 @@ SteedOfficeApp.controller('QuickSidebarController', ['$scope', function($scope) 
     });
 }]);
 
-// /* Setup Layout Part - Theme Panel */
-SteedOfficeApp.controller('ThemePanelController', ['$scope', function($scope) {
+/* Setup Layout Part - Theme Panel */
+workApp.controller('ThemePanelController', ['$scope', function($scope) {
     $scope.$on('$includeContentLoaded', function() {
         Demo.init(); // init theme panel
     });
 }]);
 
-// /* Setup Layout Part - Footer */
-SteedOfficeApp.controller('FooterController', ['$scope', function($scope) {
+/* Setup Layout Part - Footer */
+workApp.controller('FooterController', ['$scope', function($scope) {
     $scope.$on('$includeContentLoaded', function() {
         Layout.initFooter(); // init footer
     });
 }]);
 
-// /* Init global settings and run the app */
-SteedOfficeApp.run(["$rootScope", "settings", "$state", function($rootScope, settings, $state) {
+/* Init global settings and run the app */
+workApp.run(["$rootScope", "settings", "$state", function($rootScope, settings, $state) {
     $rootScope.$state = $state; // state to be accessed from view
     $rootScope.$settings = settings; // state to be accessed from view    
 }]);
-// SteedOfficeApp.run(function($rootScope, $state,$interval,config, $location, $http, $cookieStore,socket) {
+// workApp.run(function($rootScope, $state,$interval,config, $location, $http, $cookieStore) {
 //     if(config.enableClientAuthExpire){
 //         $interval(function(){
 //            if($rootScope.rootAuth != null){
@@ -111,7 +100,7 @@ SteedOfficeApp.run(["$rootScope", "settings", "$state", function($rootScope, set
 //     }
 // });
 /* Init global settings and run the app */
-SteedOfficeApp.run(function($rootScope, $state,$interval, $location, $http, $cookieStore,socket) {
+workApp.run(function($rootScope, $state,$interval, $location, $http, $cookieStore) {
     $rootScope.$state = $state;
     $rootScope.rootAuth = null;
     $rootScope.rootAuthToken = null;
@@ -146,7 +135,7 @@ SteedOfficeApp.run(function($rootScope, $state,$interval, $location, $http, $coo
     }
 });
 
-SteedOfficeApp.config(function($httpProvider) {
+workApp.config(function($httpProvider) {
 
     $httpProvider.interceptors.push(['$q', '$location','$cookieStore', function($q, $location,$cookieStore) {
         return {
@@ -170,7 +159,7 @@ SteedOfficeApp.config(function($httpProvider) {
     }]);
 });
 
-// SteedOfficeApp.config(function ($translateProvider, localStorageServiceProvider, $translatePartialLoaderProvider) {
+// workApp.config(function ($translateProvider, localStorageServiceProvider, $translatePartialLoaderProvider) {
 //     $translateProvider.useLoader('$translatePartialLoader', {
 //         urlTemplate: 'languages/{part}/{lang}.json'
 //     });

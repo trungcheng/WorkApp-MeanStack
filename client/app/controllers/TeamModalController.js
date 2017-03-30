@@ -1,4 +1,4 @@
-angular.module('SteedOfficeApp').controller('TeamModalController', function($http, $rootScope, $scope, $state, $modalInstance, team, ToastFactory){
+angular.module('workApp').controller('TeamModalController', function($http, $rootScope, $scope, $state, $modalInstance, team, ToastFactory){
 
 	$scope.team = team;
 

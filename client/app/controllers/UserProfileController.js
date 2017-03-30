@@ -1,4 +1,5 @@
-angular.module('SteedOfficeApp').controller('UserProfileController', function($rootScope, $scope, UserService, $state, $location, $http, ToastFactory, socket) {
+
+angular.module('workApp').controller('UserProfileController', function($rootScope, $scope, UserService, $state, $location, $http, ToastFactory) {
     $scope.$on('$viewContentLoaded', function() {  
         App.initAjax(); // initialize core components
         Layout.setSidebarMenuActiveLink('set', $('#sidebar_menu_link_profile')); // set profile link active in sidebar menu 

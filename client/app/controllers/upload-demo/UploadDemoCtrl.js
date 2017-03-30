@@ -1,4 +1,4 @@
-angular.module('SteedOfficeApp').controller('UploadDemoCtrl',function($scope,$rootScope,FileUploader){
+angular.module('workApp').controller('UploadDemoCtrl',function($scope,$rootScope,FileUploader){
 		$scope.files = [];
         var uploader = $scope.uploader = new FileUploader(
         {

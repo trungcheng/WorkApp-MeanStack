@@ -1,4 +1,4 @@
-angular.module('SteedOfficeApp').controller('ProjectController', function($http, $rootScope, $scope, $uibModal, $log, $state, $timeout, ToastFactory){
+angular.module('workApp').controller('ProjectController', function($http, $rootScope, $scope, $uibModal, $log, $state, $timeout, ToastFactory){
 
     $scope.teams = {};
     $scope.projects = {};

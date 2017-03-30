@@ -1,4 +1,4 @@
-angular.module('SteedOfficeApp').controller('UserCtrl', function($rootScope,$http,$state, $scope, $timeout,$translate,$translatePartialLoader,UserService,ToastFactory) {
+angular.module('workApp').controller('UserCtrl', function($rootScope,$http,$state, $scope, $timeout,$translate,$translatePartialLoader,UserService,ToastFactory) {
 
     // set sidebar closed and body solid layout mode
     $rootScope.settings.layout.pageContentWhite = true;

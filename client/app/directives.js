@@ -1,4 +1,4 @@
-SteedOfficeApp.directive('fileModel', ['$parse', function($parse){
+workApp.directive('fileModel', ['$parse', function($parse){
     return {
         restrict: 'A',
         link: function(scope, element, attrs){
@@ -14,7 +14,7 @@ SteedOfficeApp.directive('fileModel', ['$parse', function($parse){
     }
 }]);
 
-SteedOfficeApp.directive('ngSpinnerBar', ['$rootScope',
+workApp.directive('ngSpinnerBar', ['$rootScope',
     function($rootScope) {
         return {
             link: function(scope, element, attrs) {
@@ -51,7 +51,7 @@ SteedOfficeApp.directive('ngSpinnerBar', ['$rootScope',
         };
     }
 ]);
-SteedOfficeApp.directive('steedofficeValidate', function($window, $parse) {
+workApp.directive('steedofficeValidate', function($window, $parse) {
         return {
             restrict: 'A',
             required: 'form',
@@ -75,7 +75,7 @@ SteedOfficeApp.directive('steedofficeValidate', function($window, $parse) {
         }
     })
 // Handle global LINK click
-SteedOfficeApp.directive('a', function() {
+workApp.directive('a', function() {
     return {
         restrict: 'E',
         link: function(scope, elem, attrs) {
@@ -88,7 +88,7 @@ SteedOfficeApp.directive('a', function() {
     };
 });
 
-// SteedOfficeApp.directive('datePicker', function () {
+// workApp.directive('datePicker', function () {
 //     return {
 //         restrict: 'A',
 //         require: 'ngModel',
@@ -121,7 +121,7 @@ SteedOfficeApp.directive('a', function() {
 //     };
 // });
 
-SteedOfficeApp.directive('scrollToItem', function() {
+workApp.directive('scrollToItem', function() {
     return {
         restrict: 'A',
         scope: {
@@ -137,7 +137,7 @@ SteedOfficeApp.directive('scrollToItem', function() {
         }
     }
 })
-SteedOfficeApp.directive("datetimePickerJquery", function() {
+workApp.directive("datetimePickerJquery", function() {
     return {
         restrict: "A",
         require: "ngModel",
@@ -158,7 +158,7 @@ SteedOfficeApp.directive("datetimePickerJquery", function() {
         }
     }
 });
-SteedOfficeApp.directive("datePickerJquery", function() {
+workApp.directive("datePickerJquery", function() {
     return {
         restrict: "A",
         require: "ngModel",
@@ -180,7 +180,7 @@ SteedOfficeApp.directive("datePickerJquery", function() {
         }
     }
 });
-SteedOfficeApp.directive("timePickerJquery", function() {
+workApp.directive("timePickerJquery", function() {
     return {
         restrict: "A",
         require: "ngModel",
@@ -202,7 +202,7 @@ SteedOfficeApp.directive("timePickerJquery", function() {
         }
     }
 });
-SteedOfficeApp.directive("showDatetimepickerTrigger", function() {
+workApp.directive("showDatetimepickerTrigger", function() {
     return {
         restrict: 'A',
         link: function(scope, el, attrs) {
@@ -215,7 +215,7 @@ SteedOfficeApp.directive("showDatetimepickerTrigger", function() {
 });
 
 // Handle Dropdown Hover Plugin Integration
-SteedOfficeApp.directive('dropdownMenuHover', function () {
+workApp.directive('dropdownMenuHover', function () {
   return {
     link: function (scope, elem) {
       elem.dropdownHover();

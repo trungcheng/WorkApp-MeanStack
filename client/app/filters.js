@@ -1,4 +1,4 @@
-angular.module('SteedOfficeApp').filter('propsFilter', function() {
+angular.module('workApp').filter('propsFilter', function() {
     return function(items, props) {
         var out = [];
 

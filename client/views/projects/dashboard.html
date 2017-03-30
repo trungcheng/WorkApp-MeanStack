@@ -10,7 +10,7 @@
     </div>
     <div class="portlet-body">
         <div class="row" ng-if="display.addProject">
-            <div class="col-md-12">
+            <div class="col-md-6 col-md-offset-3">
                 <form role="form" novalidate ng-submit="add()" name="form1">
                     <div class="form-group">
                         <label for="">Project name: <span class="text-danger">*</span></label>
@@ -30,7 +30,7 @@
                         <div class="col-md-6">
                             <label for="">Start date:</label>
                             <p class="input-group">
-                                <input placeholder="Project start date... ->" type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="project.start" is-open="start.opened" min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" name="startdate" />
+                                <input placeholder="Project start date..." type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="project.start" is-open="start.opened" min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" name="startdate" />
                                 <span class="input-group-btn">
                                     <button type="button" class="btn btn-default" ng-click="openstart()"><i class="glyphicon glyphicon-calendar"></i></button>
                                 </span>
@@ -42,7 +42,7 @@
                         <div class="col-md-6">
                             <label for="">Due date:</label>
                             <p class="input-group">
-                                <input placeholder="Project due date... ->" type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="project.due" is-open="due.opened" min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" name="duedate" />
+                                <input placeholder="Project due date..." type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="project.due" is-open="due.opened" min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" name="duedate" />
                                 <span class="input-group-btn">
                                     <button type="button" class="btn btn-default" ng-click="opendue()"><i class="glyphicon glyphicon-calendar"></i></button>
                                 </span>
@@ -59,7 +59,7 @@
                             <ui-select-choices repeat="team in teams | propsFilter: {name: $select.search}"> Team {{team.name}} - Owner: {{team.owner.name.first}} {{team.owner.name.last}}</ui-select-choices>
                         </ui-select>
                     </div>
-                    <div class="form-group text-right">
+                    <div class="form-group text-center">
                         <button type="reset" class="btn btn-outline dark"> Cancle</button>
                         <button ng-disabled="form1.$invalid" type="submit" class="btn green"><i class="fa fa-check"></i> Add project</button>
                     </div>

@@ -1,4 +1,4 @@
-angular.module('SteedOfficeApp').service('UserService',function($http, ToastFactory, $state){
+angular.module('workApp').service('UserService',function($http, ToastFactory, $state){
 	
 	this.uploadFileToUrl = function(file, uploadUrl){
         var fd = new FormData();

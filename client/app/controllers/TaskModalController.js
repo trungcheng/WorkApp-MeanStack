@@ -1,4 +1,4 @@
-angular.module('SteedOfficeApp').controller('TaskModalController', function($http, $window, $rootScope, $scope, $state, $stateParams, $modalInstance, task, ToastFactory, FileUploader){
+angular.module('workApp').controller('TaskModalController', function($http, $window, $rootScope, $scope, $state, $stateParams, $modalInstance, task, ToastFactory, FileUploader){
 
 	$scope.task = task;
 

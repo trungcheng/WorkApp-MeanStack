@@ -1,4 +1,4 @@
-angular.module('SteedOfficeApp').controller('RegisterController', function($http, $rootScope, $scope, $state,$cookieStore,$location,RegisterService,ToastFactory,socket) {
+angular.module('workApp').controller('RegisterController', function($http, $rootScope, $scope, $state,$cookieStore,$location,RegisterService,ToastFactory) {
 
 	$scope.Credential = {};
 
