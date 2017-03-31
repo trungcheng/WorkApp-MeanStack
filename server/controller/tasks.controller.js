@@ -239,7 +239,7 @@ var TaskController = {
 		var id = req.params.id;
 		Task.findOne({_id:id}, function(err, result){
 			result.description = req.body.desc;
-			result.save(function(err, saveresult){z
+			result.save(function(err, saveresult){
 				if(err) throw err;
 				res.json({status: true,data:saveresult, message: 'Update task description success'})
 			})
