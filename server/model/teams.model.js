@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 
-var TeamSchema = new mongoose.Schema({
+module.exports = mongoose.model('Team', {
 	name: {type: String, required: true},
 	description: String,
 	owner: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
@@ -11,6 +11,5 @@ var TeamSchema = new mongoose.Schema({
 	updated_at: {type:Date, default: Date.now},
 	created_by: {type: mongoose.Schema.Types.ObjectId},
 	updated_by: {type: mongoose.Schema.Types.ObjectId}
-})
+});
 
-module.exports = mongoose.model('Team', TeamSchema);

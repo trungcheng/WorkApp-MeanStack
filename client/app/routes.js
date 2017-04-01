@@ -68,7 +68,8 @@ workApp.config(function($stateProvider, $urlRouterProvider) {
             templateUrl: "/client/views/chats/chat.html",
             data: {
                 pageTitle: 'Join Chat'
-            }
+            },
+            controller: "ChatController"
         })
         .state('app.user', {
             url: "/user",

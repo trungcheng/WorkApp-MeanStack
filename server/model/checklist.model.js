@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 
-var TaskChecklist = new mongoose.Schema({
+module.exports = mongoose.model('Task_Checklist', {
    	name: String,
    	task_id: { type: mongoose.Schema.Types.ObjectId, index: true },
    	items: [{
@@ -26,4 +26,3 @@ var TaskChecklist = new mongoose.Schema({
        	index: true
    	}
 });
-module.exports = mongoose.model('Task_Checklist', TaskChecklist);

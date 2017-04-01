@@ -1,3 +1,5 @@
+'use strict';
+
 var jwt = require('jsonwebtoken');
 
 var Middleware = {

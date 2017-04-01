@@ -1,34 +1,39 @@
+'use strict';
+
 var express = require('express');
-var expressValidator = require('express-validator');
+var app = express();
 var mongoose = require('mongoose');
 var path = require('path');
+var expressValidator = require('express-validator');
 var bodyParser = require('body-parser');
-var app = express();
 var apiRoute = require('./routes');
-var server = require('http').Server(app);
-var io = require('socket.io')(server);
+var config = require('./config/db');
+var server = require('http').createServer(app);
+var chatSocket = require('./config/chat');
+var io = require('socket.io').listen(server);
 
-
-io.on('connection', function (socket) {
-  socket.on('send_message', function(message) {
-  	io.sockets.emit('new_message', message);
-  })
+io.on('connection', function(socket) {
+    chatSocket.respond(socket, io.sockets);
 });
 
-mongoose.connect('mongodb://localhost:27017/meanpro1', function(err){
+mongoose.connect(config.database, function (err) {
 	if(err) throw err;
 	console.log('Connect to db success');
 });
+
 app.use(bodyParser.urlencoded({extended: false}));
+
 app.use(bodyParser.json());
+
 app.use(expressValidator());
+
 app.use('/client', express.static('../client'));
 app.use('/node_modules', express.static('../node_modules'));
 app.use('/server', express.static('../server'));
 
 app.use('/api', apiRoute);
 
-app.get('/', function(req, res){
+app.get('/', function(req, res) {
 	res.sendFile('index.html', {root: '../client/'});
 });
 

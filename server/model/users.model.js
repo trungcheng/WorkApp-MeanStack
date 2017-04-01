@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 
-var UserSchema = new mongoose.Schema({
+module.exports = mongoose.model('User', {
 	name:{
 		first: {type: String, required: true},
 		last: {type: String, required: true}
@@ -16,6 +16,5 @@ var UserSchema = new mongoose.Schema({
 	updated_at: {type:Date, default: Date.now},
 	created_by: {type: mongoose.Schema.Types.ObjectId},
 	updated_by: {type: mongoose.Schema.Types.ObjectId}
-})
+});
 
-module.exports = mongoose.model('User', UserSchema);
