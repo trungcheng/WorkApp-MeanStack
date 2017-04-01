@@ -4,7 +4,8 @@
   "description": "Author: trungs1bmt@gmail.com",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon server/server.js --ignore server/public --ignore client"
   },
   "repository": {
     "type": "git",
@@ -51,6 +52,7 @@
     "browser-sync": "^2.11.1",
     "gulp": "^3.9.0",
     "gulp-sass": "^3.1.0",
-    "socket.io": "^1.4.5"
+    "socket.io": "^1.4.5",
+    "nodemon": "^1.11.0"
   }
 }
