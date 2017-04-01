@@ -19,6 +19,12 @@ var workApp = angular.module('workApp', [
     'mwl.confirm',
 ]);
 
+// Connect with socket.io NodeJs
+workApp.factory('socket',function () {
+    var socket = io.connect('http://127.0.0.1:3002');
+    return socket;
+});
+
 // AngularJS v1.3.x workaround for old style controller declarition in HTML
 workApp.config(['$controllerProvider', function($controllerProvider) {
     // this option might be handy for migrating old apps, but please don't use it
@@ -76,29 +82,29 @@ workApp.run(["$rootScope", "settings", "$state", function($rootScope, settings, 
     $rootScope.$state = $state; // state to be accessed from view
     $rootScope.$settings = settings; // state to be accessed from view    
 }]);
-// workApp.run(function($rootScope, $state,$interval,config, $location, $http, $cookieStore) {
-//     if(config.enableClientAuthExpire){
-//         $interval(function(){
-//            if($rootScope.rootAuth != null){
-//                 if($cookieStore.get('time_out') != null){
-//                     $cookieStore.put('time_out',config.timeDelayCheckAuthExpire + $cookieStore.get('time_out'));
-//                 }
-//                 else{
-//                     $cookieStore.put('time_out',config.timeDelayCheckAuthExpire);
-//                 }
-//            }
-//            if($cookieStore.get('time_out') != null && $cookieStore.get('time_out') >= config.timeExpireAuth){
-//                 $http.get(API_PATH + 'auth/logout').success(function(response){
-//                     if(response.status){
-//                         $cookieStore.remove('CurrentUser');
-//                         $cookieStore.remove('time_out');
-//                         $location.path('access/login');
-//                     }
-//                 })
-//             }
-//         },config.timeDelayCheckAuthExpire);
-//     }
-// });
+
+/* Init global settings add timeout when user logged */
+workApp.run(function($rootScope, $state,$interval,config, $location, $http, $cookieStore) {
+    if(config.enableClientAuthExpire) {
+        $interval(function(){
+            if($rootScope.rootAuth != null) {
+                if($cookieStore.get('time_out') != null) {
+                    $cookieStore.put('time_out',config.timeDelayCheckAuthExpire + $cookieStore.get('time_out'));
+                }
+                else {
+                    $cookieStore.put('time_out',config.timeDelayCheckAuthExpire);
+                }
+            }
+            if($cookieStore.get('time_out') != null && $cookieStore.get('time_out') >= config.timeExpireAuth){
+                $cookieStore.remove('member');
+                $cookieStore.remove('token');
+                $cookieStore.remove('time_out');
+                $location.path('access/login');
+            }
+        },config.timeDelayCheckAuthExpire);
+    }
+});
+
 /* Init global settings and run the app */
 workApp.run(function($rootScope, $state,$interval, $location, $http, $cookieStore) {
     $rootScope.$state = $state;
@@ -143,7 +149,7 @@ workApp.config(function($httpProvider) {
                 config.headers = config.headers || {};
                 if ($cookieStore.get('token') != null) {
                     config.headers['x-access-token'] = $cookieStore.get('token');
-                    // $cookieStore.remove('time_out');
+                    $cookieStore.remove('time_out');
                 }
                 return config;
             },
@@ -151,6 +157,7 @@ workApp.config(function($httpProvider) {
                 if (response.status === 401) {
                     $cookieStore.remove('token');
                     $cookieStore.remove('member');
+                    $cookieStore.remove('time_out');
                     $location.path('access/login');
                 }
                 return $q.reject(response);

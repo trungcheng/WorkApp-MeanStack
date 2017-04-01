@@ -18,6 +18,7 @@ angular.module('workApp').controller('LoginController', function($rootScope, $sc
 			if(response.status){
 				$cookieStore.put('member',response.data.member);
 				$cookieStore.put('token',response.data.token);
+				// $cookieStore.put('time_out',response.data.token);
 				ToastFactory.popSuccess(response.message);
 				$state.go('app.dashboard');
 			}

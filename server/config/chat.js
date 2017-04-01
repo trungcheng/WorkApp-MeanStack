@@ -6,10 +6,10 @@ var RecentMessage = require('../model/chat-recent.model');
 var listUserOnline = {};
 
 module.exports.respond = function(socket, chat) {
-    socket.on('user connect', function(user_id) {
+    socket.on('user_connect', function(user_id) {
         listUserOnline[user_id] = socket.id; // add user to list users online
-        chat.emit('user online', user_id); // send this user online to all client
-        chat.to(socket.id).emit('list user online', listUserOnline); // send list user online to user just connect
+        chat.emit('user_online', user_id); // send this user online to all client
+        chat.to(socket.id).emit('list_user_online', listUserOnline); // send list user online to user just connect
         // Join room
         GroupMessage.find({ users: { $in: [user_id] } }, function(err, results) {
             results.forEach(function(result) {
@@ -22,7 +22,7 @@ module.exports.respond = function(socket, chat) {
      * On send group message from client then save db and send message to room
      * @param  {[object]} data form client
      */
-    socket.on('send group message', function(data) {
+    socket.on('send_group_message', function(data) {
         GroupMessage.findOne({ _id: data.group._id }, function(err, group_message) {
             group_message.messages.push({
                 user_send_id: data.message.user_send._id,
@@ -33,7 +33,7 @@ module.exports.respond = function(socket, chat) {
                 if (err) {
                     console.log(err);
                 } else {
-                    chat.to(data.group._id).emit('new group message', data);
+                    chat.to(data.group._id).emit('new_group_message', data);
                 }
             });
         });
@@ -43,7 +43,7 @@ module.exports.respond = function(socket, chat) {
      * On send private message from client then save db and send message to user receive
      * @param  {[object]} data form client
      */
-    socket.on('send private message', function(data) {
+    socket.on('send_private_message', function(data) {
         var privateMesssage = new PrivateMessage(data.database);
         privateMesssage.save(function(err, message) {
             if (err) {
@@ -83,7 +83,7 @@ module.exports.respond = function(socket, chat) {
                         });
                     }
                 });
-                chat.to(listUserOnline[message.user_receive_id]).emit('new private message', data);
+                chat.to(listUserOnline[message.user_receive_id]).emit('new_private_message', data);
             }
         });
     });
@@ -95,7 +95,7 @@ module.exports.respond = function(socket, chat) {
         for (var key in listUserOnline) {
             if (listUserOnline[key] == socket.id) {
                 delete listUserOnline[key];
-                chat.emit('user offline', key);
+                chat.emit('user_offline', key);
             }
         }
     });
