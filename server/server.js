@@ -16,12 +16,12 @@ io.on('connection', function(socket) {
     chatSocket.respond(socket, io.sockets);
 });
 
-mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost:27017/meanpro1', function (err) {
+mongoose.connect(config.database, function (err) {
 	if(err) throw err;
 	console.log('Connect to db success');
 });
 
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(bodyParser.json());
 
@@ -37,10 +37,10 @@ app.get('/', function(req, res) {
 	res.sendFile('index.html', {root: './client/'});
 });
 
-server.listen(process.env.PORT || 5000, function(){
-   var host = server.address().address;
-   var port = server.address().port;
-   console.log('Server listening on http://%s:%s', host, port);
+var port = process.env.PORT || 5000;
+
+server.listen(port, function(){
+   console.log('Server listening on' + port);
 });
 
 
