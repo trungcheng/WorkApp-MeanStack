@@ -21,9 +21,9 @@ mongoose.connect(config.database, function (err) {
 	console.log('Connect to db success');
 });
 
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit:'50mb'}));
 
 app.use(expressValidator());
 
@@ -37,8 +37,10 @@ app.get('/', function(req, res) {
 	res.sendFile('index.html', {root: '../client/'});
 });
 
-server.listen(1337, function() {
-	console.log('App listening to http://localhost:1337');
+var port = process.env.PORT || 3000;
+
+server.listen(port, function() {
+	console.log('App listening on' + port);
 });
 
 
