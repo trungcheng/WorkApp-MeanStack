@@ -16,7 +16,7 @@ io.on('connection', function(socket) {
     chatSocket.respond(socket, io.sockets);
 });
 
-mongoose.connect('mongodb://trungcheng:trungcheng@ds157740.mlab.com:57740/mean-trello', function (err) {
+mongoose.connect(config.database, function (err) {
 	if(err) throw err;
 	console.log('Connect to db success');
 });
@@ -37,7 +37,7 @@ app.get('/', function(req, res) {
 	res.sendFile('index.html', {root: './client/'});
 });
 
-var port = process.env.PORT || 5001;
+var port = process.env.PORT || 1337;
 
 server.listen(port, function(){
    console.log('Server listening on ' + port);
