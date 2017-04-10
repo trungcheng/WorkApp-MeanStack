@@ -12,8 +12,6 @@ var server = require('http').Server(app);
 var chatSocket = require('./config/chat');
 var io = require('socket.io')(server);
 
-var env = process.env.NODE_ENV = process.env.NODE_ENV || 'production';
-
 io.on('connection', function(socket) {
     chatSocket.respond(socket, io.sockets);
 });
