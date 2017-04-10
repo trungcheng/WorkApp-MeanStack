@@ -16,7 +16,7 @@ io.on('connection', function(socket) {
     chatSocket.respond(socket, io.sockets);
 });
 
-mongoose.connect(config.database, function (err) {
+mongoose.connect('mongodb://trungcheng:trungcheng@ds157740.mlab.com:57740/mean-trello', function (err) {
 	if(err) throw err;
 	console.log('Connect to db success');
 });
