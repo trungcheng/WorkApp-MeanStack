@@ -27,20 +27,20 @@ app.use(bodyParser.json());
 
 app.use(expressValidator());
 
-app.use('/client', express.static('./client'));
-app.use('/node_modules', express.static('./node_modules'));
-app.use('/server', express.static('./server'));
+app.use('/client', express.static('../client'));
+app.use('/node_modules', express.static('../node_modules'));
+app.use('/server', express.static('../server'));
 
 app.use('/api', apiRoute);
 
 app.get('/', function(req, res) {
-	res.sendFile('index.html', {root: './client/'});
+	res.sendFile('index.html', {root: '../client/'});
 });
 
 var port = process.env.PORT || 5001;
 
 server.listen(port, function(){
-   console.log('Server listening on' + port);
+   console.log('Server listening on ' + port);
 });
 
 
