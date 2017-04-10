@@ -12,6 +12,8 @@ var server = require('http').Server(app);
 var chatSocket = require('./config/chat');
 var io = require('socket.io')(server);
 
+var env = process.env.NODE_ENV = process.env.NODE_ENV || 'production';
+
 io.on('connection', function(socket) {
     chatSocket.respond(socket, io.sockets);
 });
@@ -37,7 +39,7 @@ app.get('/', function(req, res) {
 	res.sendFile('index.html', {root: './client/'});
 });
 
-var port = process.env.PORT || 5000;
+var port = process.env.PORT || 5001;
 
 server.listen(port, function(){
    console.log('Server listening on' + port);
