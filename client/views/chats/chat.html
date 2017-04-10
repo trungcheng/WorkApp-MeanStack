@@ -21,16 +21,16 @@
 
           		<!-- sideBar -->
           		<div class="row sideBar">
-            		<div class="row sideBar-body">
+            		<div class="row sideBar-body" ng-repeat="item in vm.onlineListUsers">
               			<div class="col-sm-3 col-xs-3 sideBar-avatar">
                 			<div class="avatar-icon">
-                  				<img src="/server/public/uploads/58c91bd9a266c6dc6bec874d/1490887499687-team16.jpg">
+                  				<img ng-src="/server/{{item.avatar}}">
                 			</div>
               			</div>
 	              		<div class="col-sm-9 col-xs-9 sideBar-main">
 	                		<div class="row">
 		                  		<div class="col-sm-8 col-xs-8 sideBar-name">
-		                    		<span class="name-meta">trungcheng</span>
+		                    		<span class="name-meta">{{ item.name.first }} {{ item.name.last }}</span>
 		                  		</div>
 	                		</div>
 	              		</div>
@@ -61,7 +61,7 @@
             		</div>
           		</div>
 
-		        <div class="row message-body">
+		        <div class="row message-body" ng-repeat="data in vm.listMessage track by $index">
 		            <div class="col-sm-12 message-main-receiver">
 	              		<div class="heading-avatar-icon" style="float:left;">
 	              			<img src="/server/public/uploads/58c91bd9a266c6dc6bec874d/1490887499687-team16.jpg">
@@ -71,7 +71,7 @@
 	                			<strong style="margin-right: 7px;">trungcheng</strong>
 	                			<span style="opacity:0.8" class="time-meta">18:18 PM</span></p>
 	                		<div class="message-chat">
-		                 		Lorem ipsum dolor sit amet.
+		                 		{{ data }}
 		                 	</div>
 	                	</div>
 		            </div>
@@ -82,15 +82,17 @@
 
 	        <!-- Reply Box -->
 	        <div class="row reply">
-	          	<div class="col-sm-1 col-xs-1 reply-emojis">
-	            	<i class="fa fa-smile-o fa-2x"></i>
-	          	</div>
-	          	<div class="col-sm-9 col-xs-9 reply-main">
-	            	<textarea class="form-control" rows="1" id="comment"></textarea>
-	          	</div>
-	          	<div class="col-sm-1 col-xs-1 reply-send" style="margin-left: 9px;">
-	            	<button style="height: 31px;margin-top:2px;line-height: 18px;" class="btn btn-primary">Send</button>
-	          	</div>
+	        	<form>
+		          	<div class="col-sm-1 col-xs-1 reply-emojis">
+		            	<i class="fa fa-smile-o fa-2x"></i>
+		          	</div>
+		          	<div class="col-sm-9 col-xs-9 reply-main">
+		            	<textarea ng-model="vm.message" class="form-control" rows="1" id="comment"></textarea>
+		          	</div>
+		          	<div class="col-sm-1 col-xs-1 reply-send" style="margin-left: 9px;">
+		            	<button ng-click="vm.sendMessage()" style="height: 31px;margin-top:2px;line-height: 18px;" class="btn btn-primary">Send</button>
+		          	</div>
+	          	</form>
 	        </div>
 	        <!-- Reply Box End -->
       	</div>

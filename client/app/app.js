@@ -21,7 +21,7 @@ var workApp = angular.module('workApp', [
 
 // Connect with socket.io NodeJs
 workApp.factory('socket',function () {
-    var socket = io.connect('http://127.0.0.1:3002');
+    var socket = io.connect('http://127.0.0.1:1337');
     return socket;
 });
 

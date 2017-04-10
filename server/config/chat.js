@@ -1,15 +1,23 @@
 'use strict';
 
+var mongoose = require('mongoose');
 var PrivateMessage = require('../model/chat-private.model');
 var GroupMessage = require('../model/chat-group.model');
 var RecentMessage = require('../model/chat-recent.model');
+var Users = require('../model/users.model');
 var listUserOnline = {};
+var lists = [];
 
 module.exports.respond = function(socket, chat) {
     socket.on('user_connect', function(user_id) {
         listUserOnline[user_id] = socket.id; // add user to list users online
         chat.emit('user_online', user_id); // send this user online to all client
-        chat.to(socket.id).emit('list_user_online', listUserOnline); // send list user online to user just connect
+        for (var key in listUserOnline) {
+            lists.push(new mongoose.Types.ObjectId(key));
+        }
+        Users.find({_id: { $in: lists } }, function (err, users) {
+            chat.to(socket.id).emit('list_user_online', users); // send list user online to user just connect
+        });
         // Join room
         GroupMessage.find({ users: { $in: [user_id] } }, function(err, results) {
             results.forEach(function(result) {
